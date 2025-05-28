@@ -1,0 +1,29 @@
+{
+  "Segunda feira": [
+    {
+      "exercicio": "Cadeira Extensora",
+      "imagem": "cadeira_extensora.png",
+      "series": "4x12",
+      "carga": "30",
+      "obs": "Movimento completo, sem travar os joelhos"
+    }
+  ],
+  "Quarta feira": [
+    {
+      "exercicio": "Puxada Frontal",
+      "imagem": "puxada_frontal.png",
+      "series": "4x12",
+      "carga": "30kg",
+      "obs": "Pegada aberta, foco nas dorsais"
+    }
+  ],
+  "Sexta feira": [
+    {
+      "exercicio": "Supino Inclinado Máquina",
+      "imagem": "supino_inclinado.png",
+      "series": "4x10",
+      "carga": "40kg",
+      "obs": "Cotovelos levemente fechados para proteger o ombro"
+    }
+  ]
+}

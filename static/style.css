@@ -1,0 +1,106 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f3f3f3;
+  color: #333;
+}
+
+.container {
+  max-width: 800px;
+  margin: 2rem auto;
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+h1, h2 {
+  text-align: center;
+  color: #444;
+}
+
+.dias {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.botao-dia {
+  background-color: #1976d2;
+  color: white;
+  padding: 1rem 2rem;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 1.2rem;
+  transition: background 0.3s;
+}
+
+.botao-dia:hover {
+  background-color: #0d47a1;
+}
+
+.exercicio {
+  border: 1px solid #ccc;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  border-radius: 8px;
+  background-color: #fafafa;
+}
+
+.exercicio img {
+  max-width: 100%;
+  height: auto;
+  margin: 0.5rem 0;
+}
+
+.series label {
+  display: inline-block;
+  margin-right: 1rem;
+  margin-top: 0.5rem;
+}
+
+.descanso {
+  margin-top: 1rem;
+}
+
+.descanso button {
+  margin-right: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: #4caf50;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.descanso button:hover {
+  background-color: #388e3c;
+}
+
+form input[type="text"] {
+  width: calc(100% - 1rem);
+  margin: 0.3rem 0;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  display: block;
+}
+
+form button {
+  margin-top: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+form button:hover {
+  background-color: #0d47a1;
+}

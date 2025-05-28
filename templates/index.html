@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Projeto Gorila - Dias de Treino</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Projeto Gorila</h1>
+    <h2>Escolha o dia do treino:</h2>
+    <div class="dias">
+      {% for dia in treinos.keys() %}
+        <a href="/treino/{{ dia }}" class="botao-dia">{{ dia }}</a>
+      {% endfor %}
+    </div>
+  </div>
+</body>
+</html>
+
