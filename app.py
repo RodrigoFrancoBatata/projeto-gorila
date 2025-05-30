@@ -1,8 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, send_file
 import json
 import os
 from datetime import datetime
 from urllib.parse import unquote
+import csv
+from io import StringIO
 
 app = Flask(__name__, static_url_path='/static', static_folder='static')
 DATA_PATH = 'data/treinos.json'
@@ -85,6 +87,23 @@ def historico():
     registros = carregar_historico()
     registros_ordenados = sorted(registros, key=lambda x: (x["data"], x["hora"]), reverse=True)
     return render_template('historico.html', registros=registros_ordenados)
+
+@app.route('/historico/download')
+def download_historico():
+    historico = carregar_historico()
+
+    output = StringIO()
+    writer = csv.DictWriter(output, fieldnames=["data", "hora", "dia", "exercicio"])
+    writer.writeheader()
+    writer.writerows(historico)
+    output.seek(0)
+
+    return send_file(
+        output,
+        mimetype='text/csv',
+        download_name='historico_treinos.csv',
+        as_attachment=True
+    )
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
