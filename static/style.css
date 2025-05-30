@@ -1,8 +1,8 @@
 body {
-  font-family: 'Segoe UI', sans-serif;
+  font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background: #f2f2f2;
+  background: #f4f4f4;
   color: #333;
 }
 
@@ -10,131 +10,177 @@ body {
   max-width: 600px;
   margin: 0 auto;
   padding: 1rem;
-  background: white;
-  border-radius: 8px;
+  background: #fff;
+  border-radius: 10px;
   margin-top: 2rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
 h1, h2, h3 {
   text-align: center;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
-a.dia, .botao-acao, button, input[type=submit] {
-  display: block;
+form {
+  margin-bottom: 1rem;
+}
+
+input[type="text"],
+input[type="file"],
+select,
+textarea {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
+  padding: 0.7rem 1.5rem;
+  border: none;
   background: #1976d2;
   color: white;
-  text-decoration: none;
-  padding: 12px;
-  margin: 10px auto;
-  border-radius: 6px;
-  text-align: center;
-  width: 90%;
-  max-width: 300px;
-  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s;
 }
 
-.dias, .acoes {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.exercicio {
-  background: #e6f6f9;
-  border: 2px solid #c3e2ec;
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.exercicio.concluido {
-  opacity: 0.6;
+button:hover {
+  background: #145ea8;
 }
 
 img {
   max-width: 100%;
+  height: auto;
+  display: block;
   margin: 0.5rem 0;
-  border-radius: 6px;
+  border-radius: 8px;
 }
 
-input[type=text] {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  box-sizing: border-box;
+.exercicio {
+  background: #e8f5e9;
+  border-left: 5px solid #388e3c;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border-radius: 5px;
 }
 
-button {
-  border: none;
-  cursor: pointer;
+.exercicio.concluido {
+  opacity: 0.7;
+  background: #c8e6c9;
+}
+
+.series {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.descanso {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 button.excluir {
-  background: #f44336;
+  background: #d32f2f;
+}
+
+button.excluir:hover {
+  background: #a00000;
+}
+
+a.botao-acao {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: #1976d2;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  margin: 0.5rem;
+  font-weight: bold;
 }
 
 .dark {
   background: #121212;
-  color: white;
+  color: #e0e0e0;
 }
 
 .dark .container {
   background: #1e1e1e;
+  color: #e0e0e0;
 }
 
-.dark input, .dark textarea {
-  background: #333;
-  color: white;
+.dark input,
+.dark select,
+.dark textarea {
+  background: #2b2b2b;
+  color: #e0e0e0;
   border: 1px solid #555;
 }
 
-hr {
-  margin: 2rem 0;
+.dark button {
+  background: #388e3c;
 }
 
-.descanso button {
-  background: #4caf50;
-  margin-right: 0.5rem;
-  margin-top: 0.5rem;
+.dark button:hover {
+  background: #2e7d32;
 }
 
-.series label {
-  display: inline-block;
-  margin: 0.25rem 0.5rem;
-}
-
-.dark-toggle {
+button.dark-toggle {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: #333;
-  color: #fff;
-  border: none;
-  padding: 10px;
-  border-radius: 50%;
+  bottom: 1rem;
+  right: 1rem;
+  padding: 0.5rem 1rem;
   font-size: 1.2rem;
+  background: #333;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 999;
 }
 
-.grafico-box {
-  margin-bottom: 2rem;
+.voltar {
+  float: right;
+  font-weight: bold;
+  font-size: 1rem;
+  margin-top: -2rem;
+  margin-bottom: 1rem;
+  text-decoration: none;
+  color: #1976d2;
 }
 
-canvas {
-  width: 100% !important;
-  height: auto !important;
+.voltar:hover {
+  text-decoration: underline;
 }
 
-@media (max-width: 500px) {
-  body {
-    font-size: 15px;
+@media (max-width: 600px) {
+  .series {
+    flex-direction: column;
   }
 
-  .container {
-    margin: 1rem;
-    padding: 1rem;
+  .descanso {
+    flex-direction: column;
+  }
+
+  h1, h2 {
+    font-size: 1.4rem;
+  }
+
+  button, a.botao-acao {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+
+  .voltar {
+    float: none;
+    text-align: center;
+    display: block;
+    margin-top: 1rem;
   }
 }
-
 
