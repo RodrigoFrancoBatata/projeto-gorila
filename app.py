@@ -4,7 +4,7 @@ import os
 from datetime import datetime
 from urllib.parse import unquote
 import csv
-from io import StringIO
+from io import StringIO, BytesIO
 
 app = Flask(__name__, static_url_path='/static', static_folder='static')
 DATA_PATH = 'data/treinos.json'
@@ -92,14 +92,17 @@ def historico():
 def download_historico():
     historico = carregar_historico()
 
-    output = StringIO()
-    writer = csv.DictWriter(output, fieldnames=["data", "hora", "dia", "exercicio"])
+    output_str = StringIO()
+    writer = csv.DictWriter(output_str, fieldnames=["data", "hora", "dia", "exercicio"])
     writer.writeheader()
     writer.writerows(historico)
-    output.seek(0)
+
+    output_bytes = BytesIO()
+    output_bytes.write(output_str.getvalue().encode('utf-8'))
+    output_bytes.seek(0)
 
     return send_file(
-        output,
+        output_bytes,
         mimetype='text/csv',
         download_name='historico_treinos.csv',
         as_attachment=True
@@ -108,4 +111,5 @@ def download_historico():
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(debug=False, host='0.0.0.0', port=port)
+
 
