@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 import json
 import os
 from datetime import datetime
+from urllib.parse import unquote
 
 app = Flask(__name__, static_url_path='/static', static_folder='static')
 DATA_PATH = 'data/treinos.json'
@@ -31,13 +32,9 @@ def index():
     treinos = carregar_treinos()
     return render_template('index.html', treinos=treinos)
 
-from urllib.parse import unquote
-
 @app.route('/treino/<path:dia>', methods=['GET', 'POST'])
 def treino(dia):
     dia = unquote(dia)
-
-def treino(dia):
     treinos = carregar_treinos()
     historico = carregar_historico()
 
@@ -92,4 +89,5 @@ def historico():
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(debug=False, host='0.0.0.0', port=port)
+
 
