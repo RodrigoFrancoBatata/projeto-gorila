@@ -1,120 +1,80 @@
-from flask import Flask, render_template, request, redirect, url_for, send_file
+from flask import Flask, render_template, request, redirect, send_file
 import json
 import os
-from datetime import datetime
-from urllib.parse import unquote
 import csv
-from io import StringIO, BytesIO
+from collections import Counter
 
-app = Flask(__name__, static_url_path='/static', static_folder='static')
-DATA_PATH = 'data/treinos.json'
-HISTORICO_PATH = 'data/historico.json'
+app = Flask(__name__)
 
+# Utilitários
 def carregar_treinos():
-    with open(DATA_PATH, 'r', encoding='utf-8') as f:
+    with open('treinos.json', 'r', encoding='utf-8') as f:
         return json.load(f)
-
-def salvar_treinos(data):
-    with open(DATA_PATH, 'w', encoding='utf-8') as f:
-        json.dump(data, f, indent=2, ensure_ascii=False)
 
 def carregar_historico():
-    if not os.path.exists(HISTORICO_PATH):
-        with open(HISTORICO_PATH, 'w', encoding='utf-8') as f:
-            json.dump([], f)
-    with open(HISTORICO_PATH, 'r', encoding='utf-8') as f:
-        return json.load(f)
+    if os.path.exists('historico.json'):
+        with open('historico.json', 'r', encoding='utf-8') as f:
+            return json.load(f)
+    return []
 
-def salvar_historico(historico):
-    with open(HISTORICO_PATH, 'w', encoding='utf-8') as f:
-        json.dump(historico, f, indent=2, ensure_ascii=False)
-
+# Home
 @app.route('/')
 def index():
     treinos = carregar_treinos()
     return render_template('index.html', treinos=treinos)
 
-@app.route('/treino/<path:dia>', methods=['GET', 'POST'])
+# Página de treino por dia
+@app.route('/treino/<dia>', methods=['GET', 'POST'])
 def treino(dia):
-    dia = unquote(dia)
-    treinos = carregar_treinos()
-    historico = carregar_historico()
-
+    treinos = carregar_treinos().get(dia, [])
     if request.method == 'POST':
-        index = int(request.form['index'])
+        historico = carregar_historico()
+        concluido = request.form.getlist('concluido')
+        for i in concluido:
+            exercicio = treinos[int(i)]
+            historico.append({
+                'dia': dia,
+                'exercicio': exercicio['exercicio']
+            })
+        with open('historico.json', 'w', encoding='utf-8') as f:
+            json.dump(historico, f, ensure_ascii=False, indent=2)
+        return redirect('/')
+    return render_template('treino.html', dia=dia, treinos=treinos)
 
-        if 'nova_carga' in request.form:
-            nova_carga = request.form['nova_carga']
-            treinos[dia][index]['carga'] = nova_carga
-
-        elif 'concluido' in request.form or 'index' in request.form:
-            foi_concluido = 'concluido' in request.form
-            treinos[dia][index]['concluido'] = foi_concluido
-
-            if foi_concluido:
-                registro = {
-                    "data": datetime.now().strftime("%Y-%m-%d"),
-                    "hora": datetime.now().strftime("%H:%M"),
-                    "dia": dia,
-                    "exercicio": treinos[dia][index]['exercicio']
-                }
-                if registro not in carregar_historico():
-                    historico.append(registro)
-                    salvar_historico(historico)
-
-        salvar_treinos(treinos)
-        return redirect(url_for('treino', dia=dia))
-
-    return render_template('treino.html', dia=dia, exercicios=treinos.get(dia, []))
-
-@app.route('/adicionar/<dia>', methods=['POST'])
-def adicionar_exercicio(dia):
-    treinos = carregar_treinos()
-    novo = {
-        "exercicio": request.form['exercicio'],
-        "imagem": request.form['imagem'],
-        "series": request.form['series'],
-        "carga": request.form['carga'],
-        "obs": request.form['obs'],
-        "concluido": False
-    }
-    treinos[dia].append(novo)
-    salvar_treinos(treinos)
-    return redirect(url_for('treino', dia=dia))
-
+# Histórico com filtro
 @app.route('/historico')
 def historico():
-    registros = carregar_historico()
+    historico = carregar_historico()
     dia_filtro = request.args.get('dia')
-
     if dia_filtro:
-        registros = [r for r in registros if r['dia'] == dia_filtro]
+        historico = [h for h in historico if h['dia'] == dia_filtro]
+    dias_unicos = sorted(set(h['dia'] for h in carregar_historico()))
+    return render_template('historico.html', historico=historico, dias=dias_unicos, dia_filtro=dia_filtro)
 
-    registros_ordenados = sorted(registros, key=lambda x: (x["data"], x["hora"]), reverse=True)
-    return render_template('historico.html', registros=registros_ordenados, dia_filtro=dia_filtro)
-
+# Download CSV
 @app.route('/historico/download')
 def download_historico():
     historico = carregar_historico()
+    with open('historico_export.csv', 'w', newline='', encoding='utf-8') as f:
+        writer = csv.DictWriter(f, fieldnames=['dia', 'exercicio'])
+        writer.writeheader()
+        writer.writerows(historico)
+    return send_file('historico_export.csv', as_attachment=True)
 
-    output_str = StringIO()
-    writer = csv.DictWriter(output_str, fieldnames=["data", "hora", "dia", "exercicio"])
-    writer.writeheader()
-    writer.writerows(historico)
-
-    output_bytes = BytesIO()
-    output_bytes.write(output_str.getvalue().encode('utf-8'))
-    output_bytes.seek(0)
-
-    return send_file(
-        output_bytes,
-        mimetype='text/csv',
-        download_name='historico_treinos.csv',
-        as_attachment=True
-    )
+# Página de progresso
+@app.route('/progresso')
+def progresso():
+    historico = carregar_historico()
+    total = len(historico)
+    dados_por_dia = Counter([h['dia'] for h in historico])
+    dados_por_exercicio = Counter([h['exercicio'] for h in historico])
+    dias_unicos = list(set(h['dia'] for h in historico))
+    return render_template('progresso.html',
+                           total=total,
+                           dias_unicos=dias_unicos,
+                           dados_por_dia=dados_por_dia,
+                           dados_por_exercicio=dados_por_exercicio)
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(debug=False, host='0.0.0.0', port=port)
-
+    app.run(debug=True)
 

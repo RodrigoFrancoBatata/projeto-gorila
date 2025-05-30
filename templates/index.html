@@ -2,25 +2,39 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Projeto Gorila - Dias de Treino</title>
+  <title>Projeto Gorila</title>
   <link rel="stylesheet" href="/static/style.css">
-  <link rel="manifest" href="/static/manifest.json">
-  <script>
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/static/serviceWorker.js");
-    }
-  </script>
 </head>
 <body>
   <div class="container">
-    <h1>Projeto Gorila</h1>
-    <h2>Escolha o dia do treino:</h2>
+    <h1>Projeto Gorila 🦍</h1>
+    <p>Selecione o dia da semana para ver os treinos:</p>
+
     <div class="dias">
-      {% for dia in treinos.keys() %}
-        <a href="/treino/{{ dia }}" class="botao-dia">{{ dia }}</a>
+      {% for dia in treinos %}
+        <a href="/treino/{{ dia }}" class="dia">{{ dia }}</a>
       {% endfor %}
     </div>
+
+    <div class="acoes">
+      <a href="/historico" class="botao-acao">📁 Histórico</a>
+      <a href="/progresso" class="botao-acao">📊 Progresso</a>
+    </div>
   </div>
+
+  <!-- Botão de modo escuro -->
+  <button class="dark-toggle" onclick="toggleDark()">🌙</button>
+  <script>
+    const toggleDark = () => {
+      document.body.classList.toggle("dark");
+      localStorage.setItem("darkmode", document.body.classList.contains("dark"));
+    };
+    window.onload = () => {
+      if (localStorage.getItem("darkmode") === "true") {
+        document.body.classList.add("dark");
+      }
+    };
+  </script>
 </body>
 </html>
 

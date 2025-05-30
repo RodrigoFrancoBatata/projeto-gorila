@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Progresso dos Treinos | Projeto Gorila</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>📊 Progresso dos Treinos</h1>
+
+    <div class="card">
+      <p><strong>Total de exercícios concluídos:</strong> {{ total }}</p>
+      <p><strong>Dias registrados:</strong> {{ dias_unicos|length }}</p>
+    </div>
+
+    <canvas id="graficoDias" width="400" height="200"></canvas>
+    <canvas id="graficoExercicios" width="400" height="200"></canvas>
+
+    <a href="/" class="btn">🏠 Voltar para a Home</a>
+  </div>
+
+  <script>
+    const dadosPorDia = {{ dados_por_dia|tojson }};
+    const dadosPorExercicio = {{ dados_por_exercicio|tojson }};
+
+    new Chart(document.getElementById('graficoDias'), {
+      type: 'bar',
+      data: {
+        labels: Object.keys(dadosPorDia),
+        datasets: [{
+          label: 'Exercícios por dia',
+          data: Object.values(dadosPorDia),
+        }]
+      }
+    });
+
+    new Chart(document.getElementById('graficoExercicios'), {
+      type: 'bar',
+      data: {
+        labels: Object.keys(dadosPorExercicio),
+        datasets: [{
+          label: 'Execuções por exercício',
+          data: Object.values(dadosPorExercicio),
+        }]
+      }
+    });
+  </script>
+
+  <button class="dark-toggle" onclick="toggleDark()">🌙</button>
+  <script>
+    const toggleDark = () => {
+      document.body.classList.toggle("dark");
+      localStorage.setItem("darkmode", document.body.classList.contains("dark"));
+    };
+    window.onload = () => {
+      if (localStorage.getItem("darkmode") === "true") {
+        document.body.classList.add("dark");
+      }
+    };
+  </script>
+</body>
+</html>
+
+
