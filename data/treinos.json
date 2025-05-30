@@ -1,14 +1,5 @@
 {
-  "Segunda feira": [
-    {
-      "exercicio": "Cadeira Extensora",
-      "imagem": "cadeira_extensora.png",
-      "series": "4x12",
-      "carga": "40kg",
-      "obs": "Movimento completo, sem travar os joelhos",
-      "concluido": false
-    }
-  ],
+  "Segunda feira": [],
   "Quarta feira": [
     {
       "exercicio": "Puxada Frontal",
@@ -30,4 +21,3 @@
     }
   ]
 }
-
