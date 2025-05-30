@@ -38,21 +38,22 @@ def treino(dia):
 
     if request.method == 'POST':
         index = int(request.form['index'])
+
         if 'nova_carga' in request.form:
             nova_carga = request.form['nova_carga']
             treinos[dia][index]['carga'] = nova_carga
-        elif 'concluido' in request.form:
-            concluido = request.form.get('concluido') == 'on'
-            treinos[dia][index]['concluido'] = concluido
 
-            if concluido:
+        elif 'concluido' in request.form or 'index' in request.form:
+            foi_concluido = 'concluido' in request.form
+            treinos[dia][index]['concluido'] = foi_concluido
+
+            if foi_concluido:
                 registro = {
                     "data": datetime.now().strftime("%Y-%m-%d"),
                     "hora": datetime.now().strftime("%H:%M"),
                     "dia": dia,
                     "exercicio": treinos[dia][index]['exercicio']
                 }
-                # Evitar duplicação
                 if registro not in historico:
                     historico.append(registro)
                     salvar_historico(historico)
