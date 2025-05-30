@@ -9,6 +9,22 @@
   <div class="container">
     <h1>Histórico de Treinos</h1>
 
+    <div style="margin-bottom: 1rem;">
+      <form method="get" action="/historico">
+        <label for="dia">Filtrar por dia:</label>
+        <select name="dia" id="dia">
+          <option value="">-- Todos --</option>
+          <option value="Segunda feira" {% if dia_filtro == 'Segunda feira' %}selected{% endif %}>Segunda feira</option>
+          <option value="Quarta feira" {% if dia_filtro == 'Quarta feira' %}selected{% endif %}>Quarta feira</option>
+          <option value="Sexta feira" {% if dia_filtro == 'Sexta feira' %}selected{% endif %}>Sexta feira</option>
+        </select>
+        <button type="submit">Filtrar</button>
+        {% if dia_filtro %}
+          <a href="/historico" class="botao-dia">Limpar Filtro</a>
+        {% endif %}
+      </form>
+    </div>
+
     <div style="margin-bottom: 1rem; text-align: right;">
       <a href="/historico/download" class="botao-dia">📥 Exportar CSV</a>
     </div>
@@ -35,7 +51,7 @@
         </tbody>
       </table>
     {% else %}
-      <p>Nenhum treino concluído ainda.</p>
+      <p>Nenhum treino encontrado.</p>
     {% endif %}
 
     <div style="margin-top: 2rem;">
@@ -44,4 +60,3 @@
   </div>
 </body>
 </html>
-

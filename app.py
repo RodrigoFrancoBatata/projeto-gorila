@@ -58,7 +58,7 @@ def treino(dia):
                     "dia": dia,
                     "exercicio": treinos[dia][index]['exercicio']
                 }
-                if registro not in historico:
+                if registro not in carregar_historico():
                     historico.append(registro)
                     salvar_historico(historico)
 
@@ -85,8 +85,13 @@ def adicionar_exercicio(dia):
 @app.route('/historico')
 def historico():
     registros = carregar_historico()
+    dia_filtro = request.args.get('dia')
+
+    if dia_filtro:
+        registros = [r for r in registros if r['dia'] == dia_filtro]
+
     registros_ordenados = sorted(registros, key=lambda x: (x["data"], x["hora"]), reverse=True)
-    return render_template('historico.html', registros=registros_ordenados)
+    return render_template('historico.html', registros=registros_ordenados, dia_filtro=dia_filtro)
 
 @app.route('/historico/download')
 def download_historico():
