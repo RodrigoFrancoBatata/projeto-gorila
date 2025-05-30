@@ -1,34 +1,35 @@
-from flask import Flask, render_template, request, redirect, url_for
-import json
-import os
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory
 from werkzeug.utils import secure_filename
+import os
+import json
 from datetime import datetime
 
 app = Flask(__name__, static_url_path='/static', static_folder='static')
 
 DATA_PATH = 'data/treinos.json'
 HISTORICO_PATH = 'data/historico.json'
-IMAGENS_PATH = 'static/imagens'
+IMAGENS_PATH = os.path.join('static', 'imagens')
 
-# ---------- Funções utilitárias ----------
 def carregar_treinos():
+    if not os.path.exists(DATA_PATH):
+        return {}
     with open(DATA_PATH, 'r', encoding='utf-8') as f:
         return json.load(f)
 
-def salvar_treinos(data):
+def salvar_treinos(treinos):
     with open(DATA_PATH, 'w', encoding='utf-8') as f:
-        json.dump(data, f, indent=2, ensure_ascii=False)
+        json.dump(treinos, f, indent=2, ensure_ascii=False)
 
-def salvar_historico(item):
-    historico = []
-    if os.path.exists(HISTORICO_PATH):
-        with open(HISTORICO_PATH, 'r', encoding='utf-8') as f:
-            historico = json.load(f)
-    historico.append(item)
+def carregar_historico():
+    if not os.path.exists(HISTORICO_PATH):
+        return []
+    with open(HISTORICO_PATH, 'r', encoding='utf-8') as f:
+        return json.load(f)
+
+def salvar_historico(historico):
     with open(HISTORICO_PATH, 'w', encoding='utf-8') as f:
         json.dump(historico, f, indent=2, ensure_ascii=False)
 
-# ---------- Rotas ----------
 @app.route('/')
 def index():
     treinos = carregar_treinos()
@@ -38,94 +39,76 @@ def index():
 def treino(dia):
     treinos = carregar_treinos()
     if request.method == 'POST':
-        index = int(request.form['index']) if 'index' in request.form else None
+        index = int(request.form['index'])
         if 'nova_carga' in request.form:
-            nova_carga = request.form['nova_carga']
-            if nova_carga:
-                treinos[dia][index]['carga'] = nova_carga
-                salvar_historico({
-                    'data': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            treinos[dia][index]['carga'] = request.form['nova_carga']
+        elif 'concluido' in request.form:
+            treinos[dia][index]['concluido'] = 'concluido' in request.form
+            if treinos[dia][index]['concluido']:
+                historico = carregar_historico()
+                historico.append({
+                    'data': datetime.now().strftime('%Y-%m-%d %H:%M'),
                     'dia': dia,
                     'exercicio': treinos[dia][index]['exercicio'],
-                    'carga': nova_carga
+                    'carga': treinos[dia][index]['carga']
                 })
-        elif 'concluido' in request.form:
-            treinos[dia][index]['concluido'] = not treinos[dia][index].get('concluido', False)
+                salvar_historico(historico)
         salvar_treinos(treinos)
-    return render_template('treino.html', dia=dia, exercicios=treinos.get(dia, []))
+        return redirect(url_for('treino', dia=dia))
+
+    exercicios = treinos.get(dia, [])
+    return render_template('treino.html', dia=dia, exercicios=exercicios)
 
 @app.route('/adicionar/<dia>', methods=['POST'])
 def adicionar(dia):
     treinos = carregar_treinos()
-    exercicio = request.form['exercicio']
-    imagem = request.files['imagem']
-    series = request.form['series']
-    carga = request.form['carga']
-    obs = request.form['obs']
+    imagem = request.files.get('imagem')
+    nome_arquivo = ''
 
-    if imagem:
-        nome_arquivo = secure_filename(f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{imagem.filename}")
+    if imagem and imagem.filename:
+        nome_arquivo = datetime.now().strftime('%Y%m%d%H%M%S_') + secure_filename(imagem.filename)
+        os.makedirs(IMAGENS_PATH, exist_ok=True)
         imagem.save(os.path.join(IMAGENS_PATH, nome_arquivo))
-    else:
-        nome_arquivo = ''
 
-    novo_exercicio = {
-        'exercicio': exercicio,
+    novo = {
+        'exercicio': request.form['exercicio'],
         'imagem': nome_arquivo,
-        'series': series,
-        'carga': carga,
-        'obs': obs,
+        'series': request.form['series'],
+        'carga': request.form['carga'],
+        'obs': request.form['obs'],
         'concluido': False
     }
-    treinos.setdefault(dia, []).append(novo_exercicio)
+
+    if dia not in treinos:
+        treinos[dia] = []
+
+    treinos[dia].append(novo)
     salvar_treinos(treinos)
     return redirect(url_for('treino', dia=dia))
 
 @app.route('/excluir/<dia>/<int:index>', methods=['POST'])
 def excluir(dia, index):
     treinos = carregar_treinos()
-    if dia in treinos and index < len(treinos[dia]):
+    if dia in treinos and 0 <= index < len(treinos[dia]):
         del treinos[dia][index]
         salvar_treinos(treinos)
     return redirect(url_for('treino', dia=dia))
 
 @app.route('/historico')
 def historico():
-    if os.path.exists(HISTORICO_PATH):
-        with open(HISTORICO_PATH, 'r', encoding='utf-8') as f:
-            historico = json.load(f)
-    else:
-        historico = []
+    historico = carregar_historico()
     return render_template('historico.html', historico=historico)
-
-@app.route('/historico/download')
-def download():
-    import csv
-    from flask import make_response
-    with open(HISTORICO_PATH, 'r', encoding='utf-8') as f:
-        dados = json.load(f)
-
-    csv_content = 'Data,Dia,Exercício,Carga\n'
-    for item in dados:
-        csv_content += f"{item['data']},{item['dia']},{item['exercicio']},{item['carga']}\n"
-
-    response = make_response(csv_content)
-    response.headers['Content-Disposition'] = 'attachment; filename=historico.csv'
-    response.headers['Content-Type'] = 'text/csv'
-    return response
 
 @app.route('/progresso')
 def progresso():
-    if not os.path.exists(HISTORICO_PATH):
-        return render_template('progresso.html', progresso={})
-
-    with open(HISTORICO_PATH, 'r', encoding='utf-8') as f:
-        historico = json.load(f)
-
+    historico = carregar_historico()
     progresso_dict = {}
     for item in historico:
-        chave = (item['dia'], item['exercicio'])
-        progresso_dict.setdefault(chave, []).append({
+        dia = item['dia']
+        if dia not in progresso_dict:
+            progresso_dict[dia] = []
+        progresso_dict[dia].append({
+            'exercicio': item['exercicio'],
             'data': item['data'],
             'carga': item['carga']
         })
@@ -134,82 +117,3 @@ def progresso():
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(debug=True, host='0.0.0.0', port=port)
-
-
-from flask import Flask, render_template, request, redirect, url_for
-from werkzeug.utils import secure_filename
-import os, json
-
-app = Flask(__name__)
-
-UPLOAD_FOLDER = 'static/imagens'
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-def carregar_treinos():
-    if os.path.exists("treinos.json"):
-        with open("treinos.json", "r") as f:
-            return json.load(f)
-    return {}
-
-def salvar_treinos(treinos):
-    with open("treinos.json", "w") as f:
-        json.dump(treinos, f, indent=2, ensure_ascii=False)
-
-@app.route("/")
-def index():
-    treinos = carregar_treinos()
-    return render_template("index.html", treinos=treinos)
-
-@app.route("/treino/<dia>", methods=["GET", "POST"])
-def treino(dia):
-    treinos = carregar_treinos()
-    exercicios = treinos.get(dia, [])
-
-    if request.method == "POST":
-        index = int(request.form["index"])
-        if "nova_carga" in request.form:
-            exercicios[index]["carga"] = request.form["nova_carga"]
-        elif "concluido" in request.form:
-            exercicios[index]["concluido"] = not exercicios[index].get("concluido", False)
-        salvar_treinos(treinos)
-        return redirect(url_for("treino", dia=dia))
-
-    return render_template("treino.html", dia=dia, exercicios=exercicios)
-
-@app.route("/adicionar/<dia>", methods=["POST"])
-def adicionar_exercicio(dia):
-    treinos = carregar_treinos()
-    exercicios = treinos.get(dia, [])
-
-    exercicio = request.form["exercicio"]
-    series = request.form["series"]
-    carga = request.form["carga"]
-    obs = request.form["obs"]
-
-    imagem_arquivo = request.files['imagem']
-    if imagem_arquivo and allowed_file(imagem_arquivo.filename):
-        nome_imagem = secure_filename(imagem_arquivo.filename)
-        imagem_arquivo.save(os.path.join(app.config['UPLOAD_FOLDER'], nome_imagem))
-    else:
-        nome_imagem = "default.png"
-
-    exercicios.append({
-        "exercicio": exercicio,
-        "imagem": nome_imagem,
-        "series": series,
-        "carga": carga,
-        "obs": obs,
-        "concluido": False
-    })
-
-    treinos[dia] = exercicios
-    salvar_treinos(treinos)
-    return redirect(url_for("treino", dia=dia))
-
-if __name__ == "__main__":
-    app.run(debug=True)
-
