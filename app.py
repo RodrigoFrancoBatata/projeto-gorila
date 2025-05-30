@@ -136,3 +136,80 @@ if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=port)
 
 
+from flask import Flask, render_template, request, redirect, url_for
+from werkzeug.utils import secure_filename
+import os, json
+
+app = Flask(__name__)
+
+UPLOAD_FOLDER = 'static/imagens'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def carregar_treinos():
+    if os.path.exists("treinos.json"):
+        with open("treinos.json", "r") as f:
+            return json.load(f)
+    return {}
+
+def salvar_treinos(treinos):
+    with open("treinos.json", "w") as f:
+        json.dump(treinos, f, indent=2, ensure_ascii=False)
+
+@app.route("/")
+def index():
+    treinos = carregar_treinos()
+    return render_template("index.html", treinos=treinos)
+
+@app.route("/treino/<dia>", methods=["GET", "POST"])
+def treino(dia):
+    treinos = carregar_treinos()
+    exercicios = treinos.get(dia, [])
+
+    if request.method == "POST":
+        index = int(request.form["index"])
+        if "nova_carga" in request.form:
+            exercicios[index]["carga"] = request.form["nova_carga"]
+        elif "concluido" in request.form:
+            exercicios[index]["concluido"] = not exercicios[index].get("concluido", False)
+        salvar_treinos(treinos)
+        return redirect(url_for("treino", dia=dia))
+
+    return render_template("treino.html", dia=dia, exercicios=exercicios)
+
+@app.route("/adicionar/<dia>", methods=["POST"])
+def adicionar_exercicio(dia):
+    treinos = carregar_treinos()
+    exercicios = treinos.get(dia, [])
+
+    exercicio = request.form["exercicio"]
+    series = request.form["series"]
+    carga = request.form["carga"]
+    obs = request.form["obs"]
+
+    imagem_arquivo = request.files['imagem']
+    if imagem_arquivo and allowed_file(imagem_arquivo.filename):
+        nome_imagem = secure_filename(imagem_arquivo.filename)
+        imagem_arquivo.save(os.path.join(app.config['UPLOAD_FOLDER'], nome_imagem))
+    else:
+        nome_imagem = "default.png"
+
+    exercicios.append({
+        "exercicio": exercicio,
+        "imagem": nome_imagem,
+        "series": series,
+        "carga": carga,
+        "obs": obs,
+        "concluido": False
+    })
+
+    treinos[dia] = exercicios
+    salvar_treinos(treinos)
+    return redirect(url_for("treino", dia=dia))
+
+if __name__ == "__main__":
+    app.run(debug=True)
+

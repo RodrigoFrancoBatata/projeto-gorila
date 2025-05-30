@@ -23,13 +23,16 @@
 </head>
 <body>
   <div class="container">
+    <a href="/" class="voltar">⬅️ Voltar</a>
     <h1>Treino - {{ dia }}</h1>
 
     {% for exercicio in exercicios %}
       {% set i = loop.index0 %}
       <div class="exercicio{% if exercicio.concluido %} concluido{% endif %}">
         <h3>{{ exercicio.exercicio }}</h3>
-        <img src="/static/imagens/{{ exercicio.imagem }}" alt="{{ exercicio.exercicio }}">
+        {% if exercicio.imagem %}
+          <img src="/static/imagens/{{ exercicio.imagem }}" alt="{{ exercicio.exercicio }}">
+        {% endif %}
         <p><strong>Séries:</strong> {{ exercicio.series }}</p>
         <p><strong>Carga:</strong> {{ exercicio.carga }}</p>
         <p><strong>Obs:</strong> {{ exercicio.obs }}</p>
@@ -61,10 +64,6 @@
           <button onclick="iniciarDescanso(45, this)">Descanso 45s</button>
           <button onclick="iniciarDescanso(60, this)">Descanso 60s</button>
         </div>
-
-        <form method="post" action="/excluir/{{ dia }}/{{ i }}">
-          <button type="submit" class="excluir">Excluir</button>
-        </form>
       </div>
     {% endfor %}
 
@@ -72,28 +71,14 @@
     <h2>Adicionar novo exercício</h2>
     <form method="post" action="/adicionar/{{ dia }}" enctype="multipart/form-data">
       <input type="text" name="exercicio" placeholder="Nome do exercício" required>
-      <input type="file" name="imagem" accept="image/*" capture="environment" required>
       <input type="text" name="series" placeholder="Ex: 3x12" required>
       <input type="text" name="carga" placeholder="Ex: 40kg" required>
       <input type="text" name="obs" placeholder="Observações">
+      <label>Foto do equipamento:</label>
+      <input type="file" name="imagem" accept="image/*" capture="environment">
       <button type="submit">Adicionar</button>
     </form>
-
-    <a href="/" class="voltar">Voltar</a>
   </div>
-
-  <button class="dark-toggle" onclick="toggleDark()">🌙</button>
-  <script>
-    const toggleDark = () => {
-      document.body.classList.toggle("dark");
-      localStorage.setItem("darkmode", document.body.classList.contains("dark"));
-    };
-    window.onload = () => {
-      if (localStorage.getItem("darkmode") === "true") {
-        document.body.classList.add("dark");
-      }
-    };
-  </script>
 </body>
 </html>
 
