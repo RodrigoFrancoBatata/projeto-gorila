@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Histórico de Treinos | Projeto Gorila</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Histórico de Treinos</h1>
+
+    {% if registros %}
+      <table style="width:100%; margin-top: 2rem;">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Hora</th>
+            <th>Dia</th>
+            <th>Exercício</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in registros %}
+            <tr>
+              <td>{{ r.data }}</td>
+              <td>{{ r.hora }}</td>
+              <td>{{ r.dia }}</td>
+              <td>{{ r.exercicio }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>Nenhum treino concluído ainda.</p>
+    {% endif %}
+
+    <div style="margin-top: 2rem;">
+      <a href="/" class="botao-dia">Voltar para o início</a>
+    </div>
+  </div>
+</body>
+</html>
+
