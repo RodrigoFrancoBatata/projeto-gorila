@@ -41,10 +41,10 @@
           <button type="submit">Salvar</button>
         </form>
 
-        <form method="post" style="margin-bottom: 1rem;">
+        <form method="post" style="margin-bottom: 1rem;" onsubmit="return true;">
           <input type="hidden" name="index" value="{{ i }}">
           <label>
-            <input type="checkbox" name="concluido" onchange="this.form.submit()" {% if exercicio.concluido %}checked{% endif %}>
+            <input type="checkbox" name="concluido" {% if exercicio.concluido %}checked{% endif %} onchange="this.form.submit()">
             Marcar como concluído
           </label>
         </form>
@@ -77,4 +77,3 @@
   </div>
 </body>
 </html>
-
