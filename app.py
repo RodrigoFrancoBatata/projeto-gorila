@@ -2,7 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for
 import json
 import os
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static', static_folder='static')
+
 
 DATA_PATH = 'data/treinos.json'
 
@@ -53,5 +54,9 @@ def adicionar_exercicio(dia):
     return redirect(url_for('treino', dia=dia))
 
 
+import os
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(debug=False, host='0.0.0.0', port=port)
+
