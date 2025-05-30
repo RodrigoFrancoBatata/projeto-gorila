@@ -6,10 +6,44 @@
   <title>Progresso dos Treinos | Projeto Gorila</title>
   <link rel="stylesheet" href="/static/style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .container {
+      padding: 1rem;
+      max-width: 800px;
+      margin: auto;
+    }
+    canvas {
+      margin-top: 2rem;
+    }
+    .card {
+      background: #e9f9f1;
+      border-left: 5px solid #4caf50;
+      padding: 1rem;
+      margin-top: 1rem;
+      border-radius: 8px;
+    }
+    .btn {
+      display: inline-block;
+      margin-top: 2rem;
+      padding: 0.75rem 1.5rem;
+      background-color: #4caf50;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+      text-align: center;
+    }
+    @media (max-width: 600px) {
+      canvas {
+        width: 100% !important;
+        height: auto !important;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="container">
-    <h1>📊 Progresso dos Treinos</h1>
+    <h1 style="text-align: center;">📊 Progresso dos Treinos</h1>
 
     <div class="card">
       <p><strong>Total de exercícios concluídos:</strong> {{ total }}</p>
@@ -19,7 +53,9 @@
     <canvas id="graficoDias" width="400" height="200"></canvas>
     <canvas id="graficoExercicios" width="400" height="200"></canvas>
 
-    <a href="/" class="btn">🏠 Voltar para a Home</a>
+    <div style="text-align: center;">
+      <a href="/" class="btn">🏠 Voltar para o Início</a>
+    </div>
   </div>
 
   <script>
@@ -32,8 +68,13 @@
         labels: Object.keys(dadosPorDia),
         datasets: [{
           label: 'Exercícios por dia',
+          backgroundColor: '#2196f3',
           data: Object.values(dadosPorDia),
         }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false
       }
     });
 
@@ -43,8 +84,13 @@
         labels: Object.keys(dadosPorExercicio),
         datasets: [{
           label: 'Execuções por exercício',
+          backgroundColor: '#ff9800',
           data: Object.values(dadosPorExercicio),
         }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false
       }
     });
   </script>
