@@ -104,3 +104,9 @@ form button {
 form button:hover {
   background-color: #0d47a1;
 }
+
+.exercicio.concluido {
+  background-color: #e0ffe0;
+  border: 2px solid #4caf50;
+  opacity: 0.8;
+}

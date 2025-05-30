@@ -27,7 +27,7 @@
 
     {% for exercicio in exercicios %}
       {% set i = loop.index0 %}
-      <div class="exercicio">
+      <div class="exercicio{% if exercicio.concluido %} concluido{% endif %}">
         <h3>{{ exercicio.exercicio }}</h3>
         <img src="/static/imagens/{{ exercicio.imagem }}" alt="{{ exercicio.exercicio }}">
         <p><strong>Séries:</strong> {{ exercicio.series }}</p>
@@ -39,6 +39,14 @@
           <label>Editar carga:</label>
           <input type="text" name="nova_carga" placeholder="Nova carga">
           <button type="submit">Salvar</button>
+        </form>
+
+        <form method="post" style="margin-bottom: 1rem;">
+          <input type="hidden" name="index" value="{{ i }}">
+          <label>
+            <input type="checkbox" name="concluido" onchange="this.form.submit()" {% if exercicio.concluido %}checked{% endif %}>
+            Marcar como concluído
+          </label>
         </form>
 
         <div class="series">
@@ -69,3 +77,4 @@
   </div>
 </body>
 </html>
+

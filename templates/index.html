@@ -4,6 +4,12 @@
   <meta charset="UTF-8">
   <title>Projeto Gorila - Dias de Treino</title>
   <link rel="stylesheet" href="/static/style.css">
+  <link rel="manifest" href="/static/manifest.json">
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/static/serviceWorker.js");
+    }
+  </script>
 </head>
 <body>
   <div class="container">

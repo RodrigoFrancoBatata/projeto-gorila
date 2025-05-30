@@ -4,8 +4,9 @@
       "exercicio": "Cadeira Extensora",
       "imagem": "cadeira_extensora.png",
       "series": "4x12",
-      "carga": "30",
-      "obs": "Movimento completo, sem travar os joelhos"
+      "carga": "40kg",
+      "obs": "Movimento completo, sem travar os joelhos",
+      "concluido": false
     }
   ],
   "Quarta feira": [
@@ -14,7 +15,8 @@
       "imagem": "puxada_frontal.png",
       "series": "4x12",
       "carga": "30kg",
-      "obs": "Pegada aberta, foco nas dorsais"
+      "obs": "Pegada aberta, foco nas dorsais",
+      "concluido": false
     }
   ],
   "Sexta feira": [
@@ -23,7 +25,9 @@
       "imagem": "supino_inclinado.png",
       "series": "4x10",
       "carga": "40kg",
-      "obs": "Cotovelos levemente fechados para proteger o ombro"
+      "obs": "Cotovelos levemente fechados para proteger o ombro",
+      "concluido": false
     }
   ]
 }
+
