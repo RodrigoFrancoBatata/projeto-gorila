@@ -2,111 +2,48 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Progresso dos Treinos | Projeto Gorila</title>
-  <link rel="stylesheet" href="/static/style.css">
+  <title>Progresso | Projeto Gorila</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    .container {
-      padding: 1rem;
-      max-width: 800px;
-      margin: auto;
-    }
-    canvas {
-      margin-top: 2rem;
-    }
-    .card {
-      background: #e9f9f1;
-      border-left: 5px solid #4caf50;
-      padding: 1rem;
-      margin-top: 1rem;
-      border-radius: 8px;
-    }
-    .btn {
-      display: inline-block;
-      margin-top: 2rem;
-      padding: 0.75rem 1.5rem;
-      background-color: #4caf50;
-      color: white;
-      text-decoration: none;
-      border-radius: 5px;
-      font-weight: bold;
-      text-align: center;
-    }
-    @media (max-width: 600px) {
-      canvas {
-        width: 100% !important;
-        height: auto !important;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
   <div class="container">
-    <h1 style="text-align: center;">📊 Progresso dos Treinos</h1>
-
-    <div class="card">
-      <p><strong>Total de exercícios concluídos:</strong> {{ total }}</p>
-      <p><strong>Dias registrados:</strong> {{ dias_unicos|length }}</p>
-    </div>
-
-    <canvas id="graficoDias" width="400" height="200"></canvas>
-    <canvas id="graficoExercicios" width="400" height="200"></canvas>
-
-    <div style="text-align: center;">
-      <a href="/" class="btn">🏠 Voltar para o Início</a>
-    </div>
+    <h1>📈 Progresso dos Exercícios</h1>
+    {% for nome, dados in progresso.items() %}
+      <div class="grafico-box">
+        <h2>{{ nome }}</h2>
+        <canvas id="grafico_{{ loop.index }}"></canvas>
+        <script>
+          const ctx{{ loop.index }} = document.getElementById('grafico_{{ loop.index }}').getContext('2d');
+          new Chart(ctx{{ loop.index }}, {
+            type: 'line',
+            data: {
+              labels: [{% for d in dados %}"{{ d.data }}",{% endfor %}],
+              datasets: [{
+                label: '{{ nome }} (kg)',
+                data: [{% for d in dados %}{{ d.carga | replace('kg', '') | float }},{% endfor %}],
+                fill: false,
+                borderColor: 'blue',
+                tension: 0.1
+              }]
+            },
+            options: {
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  title: {
+                    display: true,
+                    text: 'Carga (kg)'
+                  }
+                }
+              }
+            }
+          });
+        </script>
+      </div>
+    {% endfor %}
+    <a href="/" class="botao-voltar">⬅️ Voltar</a>
   </div>
-
-  <script>
-    const dadosPorDia = {{ dados_por_dia|tojson }};
-    const dadosPorExercicio = {{ dados_por_exercicio|tojson }};
-
-    new Chart(document.getElementById('graficoDias'), {
-      type: 'bar',
-      data: {
-        labels: Object.keys(dadosPorDia),
-        datasets: [{
-          label: 'Exercícios por dia',
-          backgroundColor: '#2196f3',
-          data: Object.values(dadosPorDia),
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false
-      }
-    });
-
-    new Chart(document.getElementById('graficoExercicios'), {
-      type: 'bar',
-      data: {
-        labels: Object.keys(dadosPorExercicio),
-        datasets: [{
-          label: 'Execuções por exercício',
-          backgroundColor: '#ff9800',
-          data: Object.values(dadosPorExercicio),
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false
-      }
-    });
-  </script>
-
-  <button class="dark-toggle" onclick="toggleDark()">🌙</button>
-  <script>
-    const toggleDark = () => {
-      document.body.classList.toggle("dark");
-      localStorage.setItem("darkmode", document.body.classList.contains("dark"));
-    };
-    window.onload = () => {
-      if (localStorage.getItem("darkmode") === "true") {
-        document.body.classList.add("dark");
-      }
-    };
-  </script>
 </body>
 </html>
 
