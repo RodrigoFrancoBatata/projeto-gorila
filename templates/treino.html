@@ -2,37 +2,8 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Treino | Projeto Gorila</title>
+  <title>{{ dia }} | Projeto Gorila</title>
   <link rel="stylesheet" href="/static/style.css">
-  <style>
-    img {
-      max-width: 100%;
-      height: auto;
-      border-radius: 8px;
-    }
-    .voltar {
-      display: inline-block;
-      margin-top: 2rem;
-      font-weight: bold;
-      text-decoration: none;
-      color: black;
-      float: right;
-    }
-    .excluir {
-      float: right;
-      background-color: #f44336;
-      color: white;
-      padding: 0.3rem 0.8rem;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    @media (max-width: 600px) {
-      .voltar { float: none; display: block; text-align: center; margin-top: 1rem; }
-      .excluir { float: none; margin-top: 0.5rem; display: block; width: 100%; }
-    }
-  </style>
   <script>
     function iniciarDescanso(segundos, botao) {
       let tempo = segundos;
@@ -53,7 +24,6 @@
 <body>
   <div class="container">
     <h1>Treino - {{ dia }}</h1>
-    <a href="/" class="voltar">Voltar</a>
 
     {% for exercicio in exercicios %}
       {% set i = loop.index0 %}
@@ -100,15 +70,30 @@
 
     <hr>
     <h2>Adicionar novo exercício</h2>
-    <form method="post" action="/adicionar/{{ dia }}">
+    <form method="post" action="/adicionar/{{ dia }}" enctype="multipart/form-data">
       <input type="text" name="exercicio" placeholder="Nome do exercício" required>
-      <input type="text" name="imagem" placeholder="Nome da imagem (ex: foto.png)" required>
+      <input type="file" name="imagem" accept="image/*" capture="environment" required>
       <input type="text" name="series" placeholder="Ex: 3x12" required>
       <input type="text" name="carga" placeholder="Ex: 40kg" required>
       <input type="text" name="obs" placeholder="Observações">
       <button type="submit">Adicionar</button>
     </form>
+
+    <a href="/" class="voltar">Voltar</a>
   </div>
+
+  <button class="dark-toggle" onclick="toggleDark()">🌙</button>
+  <script>
+    const toggleDark = () => {
+      document.body.classList.toggle("dark");
+      localStorage.setItem("darkmode", document.body.classList.contains("dark"));
+    };
+    window.onload = () => {
+      if (localStorage.getItem("darkmode") === "true") {
+        document.body.classList.add("dark");
+      }
+    };
+  </script>
 </body>
 </html>
 
