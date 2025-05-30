@@ -31,7 +31,12 @@ def index():
     treinos = carregar_treinos()
     return render_template('index.html', treinos=treinos)
 
-@app.route('/treino/<dia>', methods=['GET', 'POST'])
+from urllib.parse import unquote
+
+@app.route('/treino/<path:dia>', methods=['GET', 'POST'])
+def treino(dia):
+    dia = unquote(dia)
+
 def treino(dia):
     treinos = carregar_treinos()
     historico = carregar_historico()
