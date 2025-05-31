@@ -7,15 +7,20 @@
 </head>
 <body>
   <div class="container">
-    <h2>Escolha o Treino:</h2>
+    <h1>Escolha o Treino:</h1>
 
-    {% for dia in dias %}
-      <a href="/treino/{{ dia }}" class="botao-acao">{{ dia }}</a>
-    {% endfor %}
+    <div class="dias">
+      {% for dia in dias %}
+        <a href="/treino/{{ dia }}" class="botao-acao">{{ dia }}</a>
+      {% endfor %}
+    </div>
 
-    <a href="/historico" class="botao-acao">📁 Histórico de Treinos</a>
+    <div class="acoes">
+      <a href="/historico" class="botao-acao">📁 Histórico de Treinos</a>
+    </div>
   </div>
 
+  <!-- Botão de modo escuro -->
   <button class="dark-toggle" onclick="toggleDark()">🌙</button>
   <script>
     const toggleDark = () => {
