@@ -1,4 +1,3 @@
-# app.py (completo e corrigido)
 from flask import Flask, render_template, request, redirect, send_file
 import os
 import json
@@ -56,18 +55,20 @@ def treino(dia):
 @app.route("/adicionar/<dia>", methods=["POST"])
 def adicionar(dia):
     lista = carregar_exercicios(dia)
+    imagem = request.files["imagem"]
+    nome_arquivo = datetime.now().strftime("%Y%m%d%H%M%S") + "_" + imagem.filename.replace(" ", "_")
+    if imagem:
+        imagem.save(os.path.join("static/imagens", nome_arquivo))
+
     novo = {
         "exercicio": request.form["exercicio"],
-        "imagem": request.files["imagem"].filename,
+        "imagem": nome_arquivo,
         "series": request.form["series"],
         "carga": request.form["carga"],
         "obs": request.form["obs"],
         "concluido": False
     }
-    # Salvar imagem
-    imagem = request.files["imagem"]
-    if imagem:
-        imagem.save(os.path.join("static/imagens", imagem.filename))
+
     lista.append(novo)
     salvar_exercicios(dia, lista)
     return redirect(f"/treino/{dia}")
@@ -105,8 +106,7 @@ if __name__ == "__main__":
     os.makedirs("dados", exist_ok=True)
     os.makedirs("historico", exist_ok=True)
     os.makedirs("static/imagens", exist_ok=True)
-    
-    if __name__ == "__main__":
+
     import os
     port = int(os.environ.get("PORT", 10000))
     app.run(debug=False, host="0.0.0.0", port=port)
