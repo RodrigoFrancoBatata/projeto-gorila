@@ -8,16 +8,18 @@ body {
 
 .container {
   max-width: 600px;
-  margin: 2rem auto;
+  margin: 0 auto;
   padding: 1rem;
   background: #fff;
   border-radius: 10px;
+  margin-top: 2rem;
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
 h1, h2, h3 {
   text-align: center;
-  margin: 1rem 0;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 form {
@@ -33,15 +35,6 @@ textarea {
   margin-bottom: 0.75rem;
   border: 1px solid #ccc;
   border-radius: 5px;
-  background: #fff;
-  color: #333;
-}
-
-input[type="file"] {
-  padding: 0.5rem;
-  background: #fafafa;
-  border-style: dashed;
-  cursor: pointer;
 }
 
 button {
@@ -60,9 +53,8 @@ button:hover {
 }
 
 img {
-  width: 100%;
-  max-height: 200px;
-  object-fit: cover;
+  max-width: 100%;
+  height: auto;
   display: block;
   margin: 0.5rem 0;
   border-radius: 8px;
@@ -85,15 +77,12 @@ img {
   display: flex;
   justify-content: space-between;
   margin-bottom: 1rem;
-  flex-wrap: wrap;
-  gap: 0.5rem;
 }
 
 .descanso {
   display: flex;
   gap: 0.5rem;
   margin-bottom: 1rem;
-  flex-wrap: wrap;
 }
 
 button.excluir {
@@ -111,11 +100,11 @@ a.botao-acao {
   color: white;
   text-decoration: none;
   border-radius: 5px;
-  margin: 0.5rem 0;
+  margin: 0.5rem;
   font-weight: bold;
-  text-align: center;
 }
 
+/* DARK MODE */
 .dark {
   background: #121212;
   color: #e0e0e0;
@@ -134,17 +123,21 @@ a.botao-acao {
   border: 1px solid #555;
 }
 
-.dark input[type="file"] {
-  background: #2b2b2b;
-  border-color: #777;
-}
-
 .dark button {
-  background: #388e3c;
+  background: #4caf50;
 }
 
 .dark button:hover {
-  background: #2e7d32;
+  background: #388e3c;
+}
+
+.dark .exercicio {
+  background: #2e3b2f;
+  border-left: 5px solid #66bb6a;
+}
+
+.dark .exercicio.concluido {
+  background: #3a4e3d;
 }
 
 button.dark-toggle {
@@ -200,3 +193,4 @@ button.dark-toggle {
     margin-top: 1rem;
   }
 }
+
