@@ -23,67 +23,76 @@
 </head>
 <body>
   <div class="container">
-    <a href="/" class="voltar">&larr; Voltar</a>
-    <h1>{{ dia }}</h1>
+    <h1>Treino: {{ dia }}</h1>
 
     {% for exercicio in exercicios %}
       {% set i = loop.index0 %}
       <div class="exercicio{% if exercicio.concluido %} concluido{% endif %}">
-        <h3>{{ exercicio.exercicio }}</h3>
-        {% if exercicio.imagem %}
+        <div class="exercicio-topo">
+          <span class="nome">{{ exercicio.exercicio }}</span>
+          <span><strong>Série:</strong> {{ exercicio.series }}</span>
+          <span><strong>Carga:</strong> {{ exercicio.carga }}</span>
+        </div>
+
+        <div class="obs">
+          <strong>Obs:</strong> {{ exercicio.obs }}
+        </div>
+
+        <div class="exercicio-layout">
           <img src="/static/imagens/{{ exercicio.imagem }}" alt="{{ exercicio.exercicio }}">
-        {% endif %}
-        <p><strong>Séries:</strong> {{ exercicio.series }}</p>
-        <p><strong>Carga:</strong> {{ exercicio.carga }}</p>
-        <p><strong>Obs:</strong> {{ exercicio.obs }}</p>
 
-        <form method="post" enctype="multipart/form-data" style="margin-bottom: 1rem;">
-          <input type="hidden" name="index" value="{{ i }}">
-          <label>Editar carga:</label>
-          <input type="text" name="nova_carga" placeholder="Nova carga">
-          <button type="submit">Salvar</button>
-        </form>
+          <div class="acoes">
+            <form method="post">
+              <input type="hidden" name="index" value="{{ i }}">
+              <button type="submit" name="concluido" class="concluir">
+                {{ 'Concluído' if exercicio.concluido else 'Concluir' }}
+              </button>
+            </form>
 
-        <form method="post" style="margin-bottom: 1rem;">
-          <input type="hidden" name="index" value="{{ i }}">
-          <input type="hidden" name="toggle_concluido" value="true">
-          <label>
-            <input type="checkbox" name="concluido" {% if exercicio.concluido %}checked{% endif %} onchange="this.form.submit()">
-            Marcar como concluído
-          </label>
-        </form>
+            <div class="descanso">
+              <button onclick="iniciarDescanso(30, this)">30s</button>
+              <button onclick="iniciarDescanso(45, this)">45s</button>
+              <button onclick="iniciarDescanso(60, this)">60s</button>
+            </div>
 
-        <div class="series">
-          <label><input type="checkbox"> Série 1</label>
-          <label><input type="checkbox"> Série 2</label>
-          <label><input type="checkbox"> Série 3</label>
-          <label><input type="checkbox"> Série 4</label>
+            <form method="post">
+              <input type="hidden" name="index" value="{{ i }}">
+              <label>Editar carga:</label>
+              <input type="text" name="nova_carga" placeholder="Nova carga">
+              <button type="submit">Salvar</button>
+            </form>
+
+            <div class="series">
+              {% for s in range(1,5) %}
+                <input type="checkbox" id="serie{{s}}_{{i}}">
+              {% endfor %}
+              <label for="serie1_{{i}}">Séries</label>
+            </div>
+
+            <form method="post" action="/excluir/{{ dia }}/{{ i }}">
+              <button type="submit" class="excluir">❌</button>
+            </form>
+          </div>
         </div>
-
-        <div class="descanso">
-          <button onclick="iniciarDescanso(30, this)">Descanso 30s</button>
-          <button onclick="iniciarDescanso(45, this)">Descanso 45s</button>
-          <button onclick="iniciarDescanso(60, this)">Descanso 60s</button>
-        </div>
-
-        <form method="post" action="/excluir/{{ dia }}/{{ i }}">
-          <button type="submit" class="excluir">Excluir Exercício</button>
-        </form>
       </div>
     {% endfor %}
 
-    <hr>
-    <h2>Adicionar novo exercício</h2>
-    <form method="post" action="/adicionar/{{ dia }}" enctype="multipart/form-data">
-      <input type="text" name="exercicio" placeholder="Nome do exercício" required>
-      <input type="file" name="imagem" accept="image/*">
-      <input type="text" name="series" placeholder="Ex: 3x12" required>
-      <input type="text" name="carga" placeholder="Ex: 40kg" required>
-      <input type="text" name="obs" placeholder="Observações">
-      <button type="submit">Adicionar</button>
-    </form>
+    <div class="formulario">
+      <h2>Adicionar novo exercício</h2>
+      <form method="post" action="/adicionar/{{ dia }}" enctype="multipart/form-data">
+        <input type="text" name="exercicio" placeholder="Nome do exercício" required>
+        <input type="file" name="imagem" accept="image/*" required>
+        <input type="text" name="carga" placeholder="Carga" required>
+        <input type="text" name="series" placeholder="Série" required>
+        <input type="text" name="obs" placeholder="Observações">
+        <button type="submit">Adicionar</button>
+      </form>
+    </div>
+
+    <a href="/" class="voltar">⬅</a>
   </div>
 
+  <!-- Botão de modo escuro -->
   <button class="dark-toggle" onclick="toggleDark()">🌙</button>
   <script>
     const toggleDark = () => {

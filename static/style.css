@@ -104,7 +104,6 @@ a.botao-acao {
   font-weight: bold;
 }
 
-/* DARK MODE */
 .dark {
   background: #121212;
   color: #e0e0e0;
@@ -124,20 +123,21 @@ a.botao-acao {
 }
 
 .dark button {
-  background: #4caf50;
+  background: #388e3c;
+  color: white;
 }
 
 .dark button:hover {
-  background: #388e3c;
+  background: #2e7d32;
 }
 
 .dark .exercicio {
-  background: #2e3b2f;
-  border-left: 5px solid #66bb6a;
+  background: #1c3521;
+  border-left: 5px solid #4caf50;
 }
 
 .dark .exercicio.concluido {
-  background: #3a4e3d;
+  background: #2f5f3d;
 }
 
 button.dark-toggle {
@@ -193,4 +193,5 @@ button.dark-toggle {
     margin-top: 1rem;
   }
 }
+
 

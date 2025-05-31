@@ -1,3 +1,4 @@
+# app.py (corrigido para históricos com Treino A/B/C e exportação CSV robusta)
 from flask import Flask, render_template, request, redirect, send_file
 import os
 import json
@@ -25,7 +26,7 @@ def salvar_exercicios(dia, lista):
 def salvar_historico(dia, lista):
     hoje = datetime.now().strftime("%Y-%m-%d")
     historico = {"data": hoje, "exercicios": lista}
-    caminho = f"historico/historico_{dia.replace(' ', '_').lower()}.json"
+    caminho = f"historico/historico_{dia.replace(' ', '_')}.json"
     todos = []
     if os.path.exists(caminho):
         with open(caminho, "r") as f:
@@ -77,7 +78,7 @@ def adicionar(dia):
 def historico():
     historicos = {}
     for dia in DIAS:
-        caminho = f"historico/historico_{dia.replace(' ', '_').lower()}.json"
+        caminho = f"historico/historico_{dia.replace(' ', '_')}.json"
         if os.path.exists(caminho):
             with open(caminho, "r") as f:
                 historicos[dia] = json.load(f)
@@ -92,7 +93,7 @@ def download_historico():
         writer = csv.writer(f)
         writer.writerow(["Data", "Treino", "Exercício", "Séries", "Carga", "Obs"])
         for dia in DIAS:
-            caminho = f"historico/historico_{dia.replace(' ', '_').lower()}.json"
+            caminho = f"historico/historico_{dia.replace(' ', '_')}.json"
             if os.path.exists(caminho):
                 with open(caminho, "r") as f_json:
                     registros = json.load(f_json)
@@ -109,5 +110,4 @@ if __name__ == "__main__":
 
     port = int(os.environ.get("PORT", 10000))
     app.run(debug=False, host="0.0.0.0", port=port)
-
 
