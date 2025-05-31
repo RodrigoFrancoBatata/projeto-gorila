@@ -2,57 +2,18 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Projeto Gorila</title>
   <link rel="stylesheet" href="/static/style.css">
-  <style>
-    .container {
-      padding: 2rem;
-      max-width: 500px;
-      margin: auto;
-      text-align: center;
-    }
-    .dia {
-      display: block;
-      background-color: #2196f3;
-      color: white;
-      text-decoration: none;
-      padding: 1rem;
-      margin: 0.5rem 0;
-      border-radius: 8px;
-      font-size: 1.25rem;
-    }
-    .botao-acao {
-      display: inline-block;
-      background-color: #4caf50;
-      color: white;
-      text-decoration: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: 6px;
-      margin-top: 1rem;
-      font-weight: bold;
-    }
-    @media (max-width: 500px) {
-      .dia, .botao-acao {
-        width: 100%;
-        font-size: 1rem;
-      }
-    }
-  </style>
 </head>
 <body>
   <div class="container">
-    <h2><strong>Escolha o Treino:</strong></h2>
+    <h2>Escolha o Treino:</h2>
 
-    <div class="dias">
-      {% for dia in treinos %}
-        <a href="/treino/{{ dia }}" class="dia">Treino {{ loop.index }}</a>
-      {% endfor %}
-    </div>
+    {% for dia in dias %}
+      <a href="/treino/{{ dia }}" class="botao-acao">{{ dia }}</a>
+    {% endfor %}
 
-    <div>
-      <a href="/historico" class="botao-acao">📁 Histórico de Treinos</a>
-    </div>
+    <a href="/historico" class="botao-acao">📁 Histórico de Treinos</a>
   </div>
 
   <button class="dark-toggle" onclick="toggleDark()">🌙</button>
@@ -69,5 +30,3 @@
   </script>
 </body>
 </html>
-
-
