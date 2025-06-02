@@ -1,73 +1,83 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
   <title>{{ dia }} | Projeto Gorila</title>
-  <link rel="stylesheet" href="/static/style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/static/style.css">
+  <script>
+    function iniciarDescanso(segundos, botao) {
+      let tempo = segundos;
+      botao.disabled = true;
+      const original = botao.textContent;
+      const intervalo = setInterval(() => {
+        if (tempo > 0) {
+          botao.textContent = `${tempo--}s`;
+        } else {
+          clearInterval(intervalo);
+          botao.textContent = original;
+          botao.disabled = false;
+        }
+      }, 1000);
+    }
+  </script>
 </head>
 <body>
   <div class="container">
     <a href="/" class="voltar">← Voltar</a>
     <h1>{{ dia }}</h1>
 
-    {% if exercicios %}
-      {% for i, ex in enumerate(exercicios) %}
-        <div class="card {% if ex.concluido %}concluido{% endif %}">
-          {% if ex.imagem %}
-            <img src="/static/imagens/{{ ex.imagem }}" alt="{{ ex.exercicio }}" class="imagem-exercicio" />
-          {% endif %}
-          <h3>{{ ex.exercicio }}</h3>
-          <p><strong>Séries:</strong> {{ ex.series }}</p>
-          <p><strong>Carga:</strong> {{ ex.carga }} kg</p>
-          {% if ex.obs %}
-            <p><strong>Obs:</strong> {{ ex.obs }}</p>
-          {% endif %}
+    {% for exercicio in exercicios %}
+      {% set i = loop.index0 %}
+      <div class="exercicio{% if exercicio.concluido %} concluido{% endif %}">
+        <h3>{{ exercicio.exercicio }}</h3>
+        <img src="/static/imagens/{{ exercicio.imagem }}" alt="{{ exercicio.exercicio }}">
+        <p><strong>Séries:</strong> {{ exercicio.series }}</p>
+        <p><strong>Carga:</strong> {{ exercicio.carga }}</p>
+        <p><strong>Obs:</strong> {{ exercicio.obs }}</p>
 
-          <form method="post" class="form-linha">
-            <input type="hidden" name="index" value="{{ i }}" />
-            <input type="hidden" name="concluido" value="1" />
-            <button type="submit" class="botao-acao">
-              {% if ex.concluido %}🔁 Desmarcar{% else %}✅ Marcar como concluído{% endif %}
-            </button>
-          </form>
+        <form method="post" style="margin-bottom: 1rem;">
+          <input type="hidden" name="index" value="{{ i }}">
+          <label>Editar carga:</label>
+          <input type="text" name="nova_carga" placeholder="Nova carga">
+          <button type="submit">Salvar</button>
+        </form>
 
-          <form method="post" class="form-linha">
-            <input type="hidden" name="index" value="{{ i }}" />
-            <label>Alterar carga:</label>
-            <input type="text" name="nova_carga" value="{{ ex.carga }}" required />
-            <button type="submit" class="botao-acao">💪 Atualizar</button>
-          </form>
+        <form method="post" style="margin-bottom: 1rem;" onsubmit="return true;">
+          <input type="hidden" name="index" value="{{ i }}">
+          <label>
+            <input type="checkbox" name="concluido" {% if exercicio.concluido %}checked{% endif %} onchange="this.form.submit()">
+            Marcar como concluído
+          </label>
+        </form>
+
+        <div class="series">
+          <label><input type="checkbox"> Série 1</label>
+          <label><input type="checkbox"> Série 2</label>
+          <label><input type="checkbox"> Série 3</label>
+          <label><input type="checkbox"> Série 4</label>
         </div>
-      {% endfor %}
-    {% else %}
-      <p>Nenhum exercício cadastrado para este treino.</p>
-    {% endif %}
 
-    <div class="formulario">
-      <h2>➕ Adicionar Novo Exercício</h2>
-      <form method="post" action="/adicionar/{{ dia }}" enctype="multipart/form-data">
-        <label>Nome do exercício:</label>
-        <input type="text" name="exercicio" required />
+        <div class="descanso">
+          <button onclick="iniciarDescanso(30, this)">Descanso 30s</button>
+          <button onclick="iniciarDescanso(45, this)">Descanso 45s</button>
+          <button onclick="iniciarDescanso(60, this)">Descanso 60s</button>
+        </div>
+      </div>
+    {% endfor %}
 
-        <label>Foto do equipamento:</label>
-        <input type="file" name="imagem" accept="image/*" capture="environment" required />
-
-        <label>Séries:</label>
-        <input type="text" name="series" required />
-
-        <label>Carga (kg):</label>
-        <input type="text" name="carga" required />
-
-        <label>Observações:</label>
-        <input type="text" name="obs" />
-
-        <button type="submit" class="botao-acao">➕ Adicionar</button>
-      </form>
-    </div>
+    <hr>
+    <h2>Adicionar novo exercício</h2>
+    <form method="post" action="/adicionar/{{ dia }}" enctype="multipart/form-data">
+      <input type="text" name="exercicio" placeholder="Nome do exercício" required>
+      <input type="file" name="imagem" accept="image/*" required>
+      <input type="text" name="series" placeholder="Ex: 3x12" required>
+      <input type="text" name="carga" placeholder="Ex: 40kg" required>
+      <input type="text" name="obs" placeholder="Observações">
+      <button type="submit">Adicionar</button>
+    </form>
   </div>
 
-  <!-- Botão Dark Mode -->
   <button class="dark-toggle" onclick="toggleDark()">🌙</button>
   <script>
     const toggleDark = () => {

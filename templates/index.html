@@ -1,29 +1,29 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Projeto Gorila</title>
-  <link rel="stylesheet" href="/static/style.css" />
+  <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
   <div class="container">
     <h1>Projeto Gorila 🦍</h1>
-    <h2>Escolha seu treino</h2>
+    <p>Escolha o treino:</p>
 
-    <div class="treinos">
+    <div class="dias">
       {% for dia in dias %}
-        <a href="/treino/{{ dia }}" class="botao-treino">{{ dia }}</a>
+        <a href="/treino/{{ dia }}" class="botao-acao">{{ dia }}</a>
       {% endfor %}
     </div>
 
-    <div class="acoes-home">
-      <a href="/historico" class="botao-acao">📅 Ver Histórico</a>
-      <a href="/historico/download" class="botao-acao">📥 Exportar Histórico CSV</a>
+    <div class="acoes">
+      <a href="/historico" class="botao-acao">📁 Histórico</a>
+      <a href="/historico/download" class="botao-acao">⬇️ Exportar CSV</a>
     </div>
   </div>
 
-  <!-- Botão Dark Mode -->
+  <!-- Botão de modo escuro -->
   <button class="dark-toggle" onclick="toggleDark()">🌙</button>
   <script>
     const toggleDark = () => {

@@ -1,40 +1,39 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Histórico de Treinos</title>
-  <link rel="stylesheet" href="/static/style.css" />
+  <meta charset="UTF-8">
+  <title>Histórico de Treinos | Projeto Gorila</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
   <div class="container">
     <a href="/" class="voltar">← Voltar</a>
-    <h1>📅 Histórico de Treinos</h1>
+    <h1>📁 Histórico de Treinos</h1>
 
-    {% for dia, treinos in historicos.items() %}
-      <h2>{{ dia }}</h2>
-      {% if treinos %}
-        {% for treino in treinos %}
-          <div class="card">
-            <p><strong>Data:</strong> {{ treino.data }}</p>
+    <a href="/historico/download" class="botao-acao">⬇️ Exportar CSV</a>
+
+    {% for dia, registros in historicos.items() %}
+      <div class="historico-dia">
+        <h2>{{ dia }}</h2>
+        {% for r in registros %}
+          <div class="registro">
+            <p><strong>Data:</strong> {{ r.data }}</p>
             <ul>
-              {% for ex in treino.exercicios %}
-                <li><strong>{{ ex.exercicio }}</strong> - {{ ex.series }} - {{ ex.carga }}kg <br><em>{{ ex.obs }}</em></li>
+              {% for e in r.exercicios %}
+                <li>
+                  <strong>{{ e.exercicio }}</strong> — {{ e.series }} | {{ e.carga }} | {{ e.obs }}
+                </li>
               {% endfor %}
             </ul>
           </div>
+        {% else %}
+          <p><em>Sem registros.</em></p>
         {% endfor %}
-      {% else %}
-        <p>Sem registros para este treino.</p>
-      {% endif %}
+      </div>
     {% endfor %}
-
-    <div class="acoes-home">
-      <a href="/historico/download" class="botao-acao">📥 Exportar Histórico CSV</a>
-    </div>
   </div>
 
-  <!-- Botão Dark Mode -->
   <button class="dark-toggle" onclick="toggleDark()">🌙</button>
   <script>
     const toggleDark = () => {
