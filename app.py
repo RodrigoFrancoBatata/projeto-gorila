@@ -1,4 +1,3 @@
-# app.py (corrigido para históricos com Treino A/B/C e exportação CSV robusta)
 from flask import Flask, render_template, request, redirect, send_file
 import os
 import json
@@ -11,29 +10,38 @@ DIAS = ["Treino A", "Treino B", "Treino C"]
 
 # Função para carregar os exercícios do dia
 def carregar_exercicios(dia):
-    caminho = f"dados/{dia.replace(' ', '_')}.json"
+    caminho = f"data/treinos.json"
     if os.path.exists(caminho):
-        with open(caminho, "r") as f:
-            return json.load(f)
+        with open(caminho, "r", encoding="utf-8") as f:
+            dados = json.load(f)
+            return dados.get(dia, [])
     return []
 
 # Função para salvar os exercícios do dia
 def salvar_exercicios(dia, lista):
-    with open(f"dados/{dia.replace(' ', '_')}.json", "w") as f:
-        json.dump(lista, f, indent=2)
+    caminho = f"data/treinos.json"
+    dados = {}
+    if os.path.exists(caminho):
+        with open(caminho, "r", encoding="utf-8") as f:
+            dados = json.load(f)
+    dados[dia] = lista
+    with open(caminho, "w", encoding="utf-8") as f:
+        json.dump(dados, f, indent=2, ensure_ascii=False)
 
 # Função para salvar histórico
 def salvar_historico(dia, lista):
     hoje = datetime.now().strftime("%Y-%m-%d")
     historico = {"data": hoje, "exercicios": lista}
-    caminho = f"historico/historico_{dia.replace(' ', '_')}.json"
-    todos = []
+    caminho = f"data/historico.json"
+    todos = {}
     if os.path.exists(caminho):
-        with open(caminho, "r") as f:
+        with open(caminho, "r", encoding="utf-8") as f:
             todos = json.load(f)
-    todos.append(historico)
-    with open(caminho, "w") as f:
-        json.dump(todos, f, indent=2)
+    if dia not in todos:
+        todos[dia] = []
+    todos[dia].append(historico)
+    with open(caminho, "w", encoding="utf-8") as f:
+        json.dump(todos, f, indent=2, ensure_ascii=False)
 
 @app.route("/")
 def home():
@@ -77,37 +85,29 @@ def adicionar(dia):
 @app.route("/historico")
 def historico():
     historicos = {}
-    for dia in DIAS:
-        caminho = f"historico/historico_{dia.replace(' ', '_')}.json"
-        if os.path.exists(caminho):
-            with open(caminho, "r") as f:
-                historicos[dia] = json.load(f)
-        else:
-            historicos[dia] = []
+    caminho = f"data/historico.json"
+    if os.path.exists(caminho):
+        with open(caminho, "r", encoding="utf-8") as f:
+            historicos = json.load(f)
     return render_template("historico.html", historicos=historicos)
 
 @app.route("/historico/download")
 def download_historico():
-    caminho_csv = "historico/historico_exportado.csv"
-    with open(caminho_csv, "w", newline="") as f:
+    caminho_csv = "data/historico_exportado.csv"
+    with open(caminho_csv, "w", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
         writer.writerow(["Data", "Treino", "Exercício", "Séries", "Carga", "Obs"])
-        for dia in DIAS:
-            caminho = f"historico/historico_{dia.replace(' ', '_')}.json"
-            if os.path.exists(caminho):
-                with open(caminho, "r") as f_json:
-                    registros = json.load(f_json)
-                    for r in registros:
-                        data = r["data"]
-                        for e in r["exercicios"]:
-                            writer.writerow([data, dia, e["exercicio"], e["series"], e["carga"], e["obs"]])
+        with open("data/historico.json", "r", encoding="utf-8") as f_json:
+            registros = json.load(f_json)
+            for dia, entradas in registros.items():
+                for r in entradas:
+                    data = r["data"]
+                    for e in r["exercicios"]:
+                        writer.writerow([data, dia, e["exercicio"], e["series"], e["carga"], e["obs"]])
     return send_file(caminho_csv, as_attachment=True)
 
 if __name__ == "__main__":
-    os.makedirs("dados", exist_ok=True)
-    os.makedirs("historico", exist_ok=True)
+    os.makedirs("data", exist_ok=True)
     os.makedirs("static/imagens", exist_ok=True)
-
     port = int(os.environ.get("PORT", 10000))
-    app.run(debug=False, host="0.0.0.0", port=port)
-
+    app.run(debug=True, host="0.0.0.0", port=port)

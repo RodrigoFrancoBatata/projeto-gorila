@@ -35,6 +35,7 @@ textarea {
   margin-bottom: 0.75rem;
   border: 1px solid #ccc;
   border-radius: 5px;
+  font-size: 1rem;
 }
 
 button {
@@ -45,6 +46,7 @@ button {
   border-radius: 5px;
   cursor: pointer;
   font-weight: bold;
+  font-size: 1rem;
   transition: background 0.2s;
 }
 
@@ -77,12 +79,14 @@ img {
   display: flex;
   justify-content: space-between;
   margin-bottom: 1rem;
+  flex-wrap: wrap;
 }
 
 .descanso {
   display: flex;
   gap: 0.5rem;
   margin-bottom: 1rem;
+  flex-wrap: wrap;
 }
 
 button.excluir {
@@ -102,6 +106,7 @@ a.botao-acao {
   border-radius: 5px;
   margin: 0.5rem;
   font-weight: bold;
+  text-align: center;
 }
 
 .dark {
@@ -124,20 +129,10 @@ a.botao-acao {
 
 .dark button {
   background: #388e3c;
-  color: white;
 }
 
 .dark button:hover {
   background: #2e7d32;
-}
-
-.dark .exercicio {
-  background: #1c3521;
-  border-left: 5px solid #4caf50;
-}
-
-.dark .exercicio.concluido {
-  background: #2f5f3d;
 }
 
 button.dark-toggle {
@@ -169,19 +164,23 @@ button.dark-toggle {
 }
 
 @media (max-width: 600px) {
-  .series {
-    flex-direction: column;
-  }
-
-  .descanso {
-    flex-direction: column;
+  .container {
+    width: 90%;
+    padding: 1rem;
   }
 
   h1, h2 {
     font-size: 1.4rem;
   }
 
-  button, a.botao-acao {
+  .series,
+  .descanso {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  button,
+  a.botao-acao {
     width: 100%;
     margin-bottom: 0.5rem;
   }
@@ -190,8 +189,18 @@ button.dark-toggle {
     float: none;
     text-align: center;
     display: block;
-    margin-top: 1rem;
+    margin: 1rem 0;
+  }
+
+  input[type="text"],
+  input[type="file"],
+  textarea {
+    font-size: 1rem;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
   }
 }
-
 

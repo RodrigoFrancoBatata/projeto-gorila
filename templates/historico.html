@@ -1,62 +1,51 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <title>Histórico de Treinos | Projeto Gorila</title>
-  <link rel="stylesheet" href="/static/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Histórico de Treinos</title>
+  <link rel="stylesheet" href="/static/style.css" />
 </head>
 <body>
   <div class="container">
-    <h1>Histórico de Treinos</h1>
+    <a href="/" class="voltar">← Voltar</a>
+    <h1>📅 Histórico de Treinos</h1>
 
-    <div style="margin-bottom: 1rem;">
-      <form method="get" action="/historico">
-        <label for="dia">Filtrar por dia:</label>
-        <select name="dia" id="dia">
-          <option value="">-- Todos --</option>
-          <option value="Segunda feira" {% if dia_filtro == 'Segunda feira' %}selected{% endif %}>Segunda feira</option>
-          <option value="Quarta feira" {% if dia_filtro == 'Quarta feira' %}selected{% endif %}>Quarta feira</option>
-          <option value="Sexta feira" {% if dia_filtro == 'Sexta feira' %}selected{% endif %}>Sexta feira</option>
-        </select>
-        <button type="submit">Filtrar</button>
-        {% if dia_filtro %}
-          <a href="/historico" class="botao-dia">Limpar Filtro</a>
-        {% endif %}
-      </form>
-    </div>
+    {% for dia, treinos in historicos.items() %}
+      <h2>{{ dia }}</h2>
+      {% if treinos %}
+        {% for treino in treinos %}
+          <div class="card">
+            <p><strong>Data:</strong> {{ treino.data }}</p>
+            <ul>
+              {% for ex in treino.exercicios %}
+                <li><strong>{{ ex.exercicio }}</strong> - {{ ex.series }} - {{ ex.carga }}kg <br><em>{{ ex.obs }}</em></li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p>Sem registros para este treino.</p>
+      {% endif %}
+    {% endfor %}
 
-    <div style="margin-bottom: 1rem; text-align: right;">
-      <a href="/historico/download" class="botao-dia">📥 Exportar CSV</a>
-    </div>
-
-    {% if registros %}
-      <table style="width:100%; margin-top: 2rem;">
-        <thead>
-          <tr>
-            <th>Data</th>
-            <th>Hora</th>
-            <th>Dia</th>
-            <th>Exercício</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for r in registros %}
-            <tr>
-              <td>{{ r.data }}</td>
-              <td>{{ r.hora }}</td>
-              <td>{{ r.dia }}</td>
-              <td>{{ r.exercicio }}</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    {% else %}
-      <p>Nenhum treino encontrado.</p>
-    {% endif %}
-
-    <div style="margin-top: 2rem;">
-      <a href="/" class="botao-dia">Voltar para o início</a>
+    <div class="acoes-home">
+      <a href="/historico/download" class="botao-acao">📥 Exportar Histórico CSV</a>
     </div>
   </div>
+
+  <!-- Botão Dark Mode -->
+  <button class="dark-toggle" onclick="toggleDark()">🌙</button>
+  <script>
+    const toggleDark = () => {
+      document.body.classList.toggle("dark");
+      localStorage.setItem("darkmode", document.body.classList.contains("dark"));
+    };
+    window.onload = () => {
+      if (localStorage.getItem("darkmode") === "true") {
+        document.body.classList.add("dark");
+      }
+    };
+  </script>
 </body>
 </html>
