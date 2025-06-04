@@ -8,7 +8,6 @@ app = Flask(__name__)
 
 DIAS = ["Treino A", "Treino B", "Treino C"]
 
-# Função para carregar os exercícios do dia
 def carregar_exercicios(dia):
     caminho = f"data/treinos.json"
     if os.path.exists(caminho):
@@ -17,7 +16,6 @@ def carregar_exercicios(dia):
             return dados.get(dia, [])
     return []
 
-# Função para salvar os exercícios do dia
 def salvar_exercicios(dia, lista):
     caminho = f"data/treinos.json"
     dados = {}
@@ -28,24 +26,16 @@ def salvar_exercicios(dia, lista):
     with open(caminho, "w", encoding="utf-8") as f:
         json.dump(dados, f, indent=2, ensure_ascii=False)
 
-# Função para salvar histórico global (todos os treinos em 1 arquivo)
 def salvar_historico(dia, lista):
     hoje = datetime.now().strftime("%Y-%m-%d")
     caminho = "data/historico.json"
     historico = {}
-
     if os.path.exists(caminho):
         with open(caminho, "r", encoding="utf-8") as f:
             historico = json.load(f)
-
     if dia not in historico:
         historico[dia] = []
-
-    historico[dia].append({
-        "data": hoje,
-        "exercicios": lista
-    })
-
+    historico[dia].append({"data": hoje, "exercicios": lista})
     with open(caminho, "w", encoding="utf-8") as f:
         json.dump(historico, f, indent=2, ensure_ascii=False)
 
@@ -56,21 +46,25 @@ def home():
 @app.route("/treino/<dia>", methods=["GET", "POST"])
 def treino(dia):
     lista = carregar_exercicios(dia)
+
     if request.method == "POST":
+        index = int(request.form["index"])
+
+        # Atualiza carga
         if "nova_carga" in request.form:
-            index = int(request.form["index"])
             lista[index]["carga"] = request.form["nova_carga"]
 
-            if "nova_imagem" in request.files:
-                nova_imagem = request.files["nova_imagem"]
-                if nova_imagem and nova_imagem.filename:
-                    nome_arquivo = datetime.now().strftime("%Y%m%d%H%M%S") + "_" + nova_imagem.filename.replace(" ", "_")
-                    caminho = os.path.join("static/imagens", nome_arquivo)
-                    nova_imagem.save(caminho)
-                    lista[index]["imagem"] = nome_arquivo
+        # Atualiza imagem
+        if "nova_imagem" in request.files:
+            nova_imagem = request.files["nova_imagem"]
+            if nova_imagem and nova_imagem.filename:
+                nome_arquivo = datetime.now().strftime("%Y%m%d%H%M%S") + "_" + nova_imagem.filename.replace(" ", "_")
+                caminho = os.path.join("static/imagens", nome_arquivo)
+                nova_imagem.save(caminho)
+                lista[index]["imagem"] = nome_arquivo
 
-        elif "concluido" in request.form:
-            index = int(request.form["index"])
+        # Alterna concluído
+        if "concluido" in request.form:
             lista[index]["concluido"] = not lista[index].get("concluido", False)
 
         salvar_exercicios(dia, lista)
@@ -131,5 +125,4 @@ if __name__ == "__main__":
     os.makedirs("static/imagens", exist_ok=True)
     port = int(os.environ.get("PORT", 10000))
     app.run(debug=True, host="0.0.0.0", port=port)
-
 
