@@ -31,17 +31,25 @@ def salvar_exercicios(dia, lista):
 # Função para salvar histórico
 def salvar_historico(dia, lista):
     hoje = datetime.now().strftime("%Y-%m-%d")
-    historico = {"data": hoje, "exercicios": lista}
-    caminho = f"data/historico.json"
-    todos = {}
+    registro = {"data": hoje, "exercicios": lista}
+    caminho = f"historico/historico_{dia.replace(' ', '_')}.json"
+
+    # Verifica se o histórico já existe como lista, senão inicia como lista
+    historico = []
     if os.path.exists(caminho):
         with open(caminho, "r", encoding="utf-8") as f:
-            todos = json.load(f)
-    if dia not in todos:
-        todos[dia] = []
-    todos[dia].append(historico)
+            try:
+                historico = json.load(f)
+                if isinstance(historico, dict):
+                    historico = historico.get("historico", [])
+            except Exception:
+                historico = []
+
+    historico.append(registro)
+
     with open(caminho, "w", encoding="utf-8") as f:
-        json.dump(todos, f, indent=2, ensure_ascii=False)
+        json.dump(historico, f, indent=2, ensure_ascii=False)
+
 
 @app.route("/")
 def home():
