@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>{{ dia }} | Projeto Gorila</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/static/style.css">
   <script>
     function iniciarDescanso(segundos, botao) {
@@ -31,19 +30,19 @@
       {% set i = loop.index0 %}
       <div class="exercicio{% if exercicio.concluido %} concluido{% endif %}">
         <h3>{{ exercicio.exercicio }}</h3>
-        <img src="/static/imagens/{{ exercicio.imagem }}" alt="{{ exercicio.exercicio }}">
+        <img src="/static/imagens/{{ exercicio.imagem }}" alt="Imagem do exercício">
         <p><strong>Séries:</strong> {{ exercicio.series }}</p>
         <p><strong>Carga:</strong> {{ exercicio.carga }}</p>
         <p><strong>Obs:</strong> {{ exercicio.obs }}</p>
 
-        <form method="post" style="margin-bottom: 1rem;">
+        <form method="post" class="form-pequeno">
           <input type="hidden" name="index" value="{{ i }}">
           <label>Editar carga:</label>
           <input type="text" name="nova_carga" placeholder="Nova carga">
           <button type="submit">Salvar</button>
         </form>
 
-        <form method="post" style="margin-bottom: 1rem;" onsubmit="return true;">
+        <form method="post">
           <input type="hidden" name="index" value="{{ i }}">
           <label>
             <input type="checkbox" name="concluido" {% if exercicio.concluido %}checked{% endif %} onchange="this.form.submit()">
@@ -59,9 +58,9 @@
         </div>
 
         <div class="descanso">
-          <button onclick="iniciarDescanso(30, this)">Descanso 30s</button>
-          <button onclick="iniciarDescanso(45, this)">Descanso 45s</button>
-          <button onclick="iniciarDescanso(60, this)">Descanso 60s</button>
+          <button onclick="iniciarDescanso(30, this)">30s</button>
+          <button onclick="iniciarDescanso(45, this)">45s</button>
+          <button onclick="iniciarDescanso(60, this)">60s</button>
         </div>
       </div>
     {% endfor %}
@@ -70,7 +69,7 @@
     <h2>Adicionar novo exercício</h2>
     <form method="post" action="/adicionar/{{ dia }}" enctype="multipart/form-data">
       <input type="text" name="exercicio" placeholder="Nome do exercício" required>
-      <input type="file" name="imagem" accept="image/*" required>
+      <input type="file" name="imagem" accept="image/*" capture="environment" required>
       <input type="text" name="series" placeholder="Ex: 3x12" required>
       <input type="text" name="carga" placeholder="Ex: 40kg" required>
       <input type="text" name="obs" placeholder="Observações">

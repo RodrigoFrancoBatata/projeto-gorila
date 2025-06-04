@@ -1,5 +1,5 @@
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
   padding: 0;
   background: #f4f4f4;
@@ -8,18 +8,18 @@ body {
 
 .container {
   max-width: 600px;
-  margin: 0 auto;
+  margin: auto;
   padding: 1rem;
   background: #fff;
-  border-radius: 10px;
+  border-radius: 16px;
   margin-top: 2rem;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 h1, h2, h3 {
   text-align: center;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  margin: 1rem 0;
+  font-weight: 600;
 }
 
 form {
@@ -32,22 +32,24 @@ select,
 textarea {
   width: 100%;
   padding: 0.75rem;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
   border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 1rem;
+  border-radius: 8px;
+  background-color: #fff;
 }
 
 button {
-  padding: 0.7rem 1.5rem;
+  width: 100%;
+  padding: 0.8rem;
   border: none;
   background: #1976d2;
   color: white;
-  border-radius: 5px;
-  cursor: pointer;
+  border-radius: 8px;
   font-weight: bold;
   font-size: 1rem;
+  cursor: pointer;
   transition: background 0.2s;
+  margin-bottom: 0.5rem;
 }
 
 button:hover {
@@ -56,18 +58,16 @@ button:hover {
 
 img {
   max-width: 100%;
-  height: auto;
-  display: block;
+  border-radius: 12px;
   margin: 0.5rem 0;
-  border-radius: 8px;
 }
 
 .exercicio {
   background: #e8f5e9;
-  border-left: 5px solid #388e3c;
-  margin-bottom: 1rem;
+  border-left: 6px solid #388e3c;
   padding: 1rem;
-  border-radius: 5px;
+  border-radius: 12px;
+  margin-bottom: 1rem;
 }
 
 .exercicio.concluido {
@@ -78,40 +78,33 @@ img {
 .series {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 1rem;
   flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .descanso {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
   margin-bottom: 1rem;
-  flex-wrap: wrap;
-}
-
-button.excluir {
-  background: #d32f2f;
-}
-
-button.excluir:hover {
-  background: #a00000;
 }
 
 a.botao-acao {
-  display: inline-block;
-  padding: 0.75rem 1.5rem;
-  background: #1976d2;
+  display: block;
+  padding: 0.75rem;
+  text-align: center;
+  background: #388e3c;
   color: white;
   text-decoration: none;
-  border-radius: 5px;
-  margin: 0.5rem;
+  border-radius: 8px;
   font-weight: bold;
-  text-align: center;
+  margin: 0.5rem 0;
 }
 
 .dark {
   background: #121212;
-  color: #e0e0e0;
+  color: #f0f0f0;
 }
 
 .dark .container {
@@ -122,7 +115,7 @@ a.botao-acao {
 .dark input,
 .dark select,
 .dark textarea {
-  background: #2b2b2b;
+  background: #2c2c2c;
   color: #e0e0e0;
   border: 1px solid #555;
 }
@@ -139,24 +132,23 @@ button.dark-toggle {
   position: fixed;
   bottom: 1rem;
   right: 1rem;
-  padding: 0.5rem 1rem;
-  font-size: 1.2rem;
-  background: #333;
+  background: #444;
   color: white;
   border: none;
   border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  font-size: 1.2rem;
   cursor: pointer;
   z-index: 999;
 }
 
 .voltar {
-  float: right;
-  font-weight: bold;
-  font-size: 1rem;
-  margin-top: -2rem;
+  display: inline-block;
   margin-bottom: 1rem;
-  text-decoration: none;
+  font-weight: bold;
   color: #1976d2;
+  text-decoration: none;
 }
 
 .voltar:hover {
@@ -164,43 +156,16 @@ button.dark-toggle {
 }
 
 @media (max-width: 600px) {
-  .container {
-    width: 90%;
-    padding: 1rem;
+  h1, h2, h3 {
+    font-size: 1.3rem;
   }
-
-  h1, h2 {
-    font-size: 1.4rem;
-  }
-
   .series,
   .descanso {
     flex-direction: column;
-    align-items: stretch;
   }
-
   button,
   a.botao-acao {
     width: 100%;
-    margin-bottom: 0.5rem;
-  }
-
-  .voltar {
-    float: none;
-    text-align: center;
-    display: block;
-    margin: 1rem 0;
-  }
-
-  input[type="text"],
-  input[type="file"],
-  textarea {
-    font-size: 1rem;
-  }
-
-  img {
-    max-width: 100%;
-    height: auto;
   }
 }
 

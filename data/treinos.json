@@ -1,5 +1,14 @@
 {
   "Treino A": [],
-  "Treino B": [],
+  "Treino B": [
+    {
+      "exercicio": "Treino teste",
+      "imagem": "20250604071502_prancha-exercicio-academia-0217-1400x800.jpg.jpg",
+      "series": "3x12",
+      "carga": "40Kg",
+      "obs": "teste ",
+      "concluido": false
+    }
+  ],
   "Treino C": []
 }

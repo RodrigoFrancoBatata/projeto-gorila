@@ -1,29 +1,30 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Projeto Gorila</title>
-  <link rel="stylesheet" href="/static/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projeto Gorila 🦍</title>
+  <link rel="stylesheet" href="/static/style.css" />
 </head>
 <body>
   <div class="container">
-    <h1>Projeto Gorila 🦍</h1>
-    <p>Escolha o treino:</p>
+    <header class="header">
+      <h1 class="titulo">Projeto Gorila 🦍</h1>
+      <p class="subtitulo">Selecione o treino para começar:</p>
+    </header>
 
-    <div class="dias">
+    <section class="treinos">
       {% for dia in dias %}
-        <a href="/treino/{{ dia }}" class="botao-acao">{{ dia }}</a>
+        <a href="/treino/{{ dia }}" class="botao-treino">{{ dia }}</a>
       {% endfor %}
-    </div>
+    </section>
 
-    <div class="acoes">
-      <a href="/historico" class="botao-acao">📁 Histórico</a>
-      <a href="/historico/download" class="botao-acao">⬇️ Exportar CSV</a>
-    </div>
+    <section class="navegacao">
+      <a href="/historico" class="botao-navegacao">📁 Histórico</a>
+      <a href="/progresso" class="botao-navegacao">📊 Progresso</a>
+    </section>
   </div>
 
-  <!-- Botão de modo escuro -->
   <button class="dark-toggle" onclick="toggleDark()">🌙</button>
   <script>
     const toggleDark = () => {
