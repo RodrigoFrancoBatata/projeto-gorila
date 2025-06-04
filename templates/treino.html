@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>{{ dia }} | Projeto Gorila</title>
   <link rel="stylesheet" href="/static/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>
     function iniciarDescanso(segundos, botao) {
       let tempo = segundos;
@@ -23,26 +24,26 @@
 </head>
 <body>
   <div class="container">
-    <a href="/" class="voltar">← Voltar</a>
+    <a href="/" class="voltar">⬅ Voltar</a>
     <h1>{{ dia }}</h1>
 
     {% for exercicio in exercicios %}
       {% set i = loop.index0 %}
       <div class="exercicio{% if exercicio.concluido %} concluido{% endif %}">
         <h3>{{ exercicio.exercicio }}</h3>
-        <img src="/static/imagens/{{ exercicio.imagem }}" alt="Imagem do exercício">
+        <img src="/static/imagens/{{ exercicio.imagem }}" alt="{{ exercicio.exercicio }}">
         <p><strong>Séries:</strong> {{ exercicio.series }}</p>
         <p><strong>Carga:</strong> {{ exercicio.carga }}</p>
         <p><strong>Obs:</strong> {{ exercicio.obs }}</p>
 
-        <form method="post" class="form-pequeno">
+        <form method="post" class="form-box">
           <input type="hidden" name="index" value="{{ i }}">
           <label>Editar carga:</label>
           <input type="text" name="nova_carga" placeholder="Nova carga">
           <button type="submit">Salvar</button>
         </form>
 
-        <form method="post">
+        <form method="post" onsubmit="return true;">
           <input type="hidden" name="index" value="{{ i }}">
           <label>
             <input type="checkbox" name="concluido" {% if exercicio.concluido %}checked{% endif %} onchange="this.form.submit()">
@@ -58,9 +59,9 @@
         </div>
 
         <div class="descanso">
-          <button onclick="iniciarDescanso(30, this)">30s</button>
-          <button onclick="iniciarDescanso(45, this)">45s</button>
-          <button onclick="iniciarDescanso(60, this)">60s</button>
+          <button onclick="iniciarDescanso(30, this)">Descanso 30s</button>
+          <button onclick="iniciarDescanso(45, this)">Descanso 45s</button>
+          <button onclick="iniciarDescanso(60, this)">Descanso 60s</button>
         </div>
       </div>
     {% endfor %}

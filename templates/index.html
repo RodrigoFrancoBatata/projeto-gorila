@@ -1,41 +1,156 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Projeto Gorila 🦍</title>
-  <link rel="stylesheet" href="/static/style.css" />
-</head>
-<body>
-  <div class="container">
-    <header class="header">
-      <h1 class="titulo">Projeto Gorila 🦍</h1>
-      <p class="subtitulo">Selecione o treino para começar:</p>
-    </header>
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #121212;
+  color: #e0e0e0;
+}
 
-    <section class="treinos">
-      {% for dia in dias %}
-        <a href="/treino/{{ dia }}" class="botao-treino">{{ dia }}</a>
-      {% endfor %}
-    </section>
+.container {
+  max-width: 100%;
+  padding: 1rem;
+  margin: auto;
+  background: transparent;
+}
 
-    <section class="navegacao">
-      <a href="/historico" class="botao-navegacao">📁 Histórico</a>
-      <a href="/progresso" class="botao-navegacao">📊 Progresso</a>
-    </section>
-  </div>
+h1, h2, h3 {
+  text-align: center;
+  margin: 1rem 0;
+  font-weight: 600;
+}
 
-  <button class="dark-toggle" onclick="toggleDark()">🌙</button>
-  <script>
-    const toggleDark = () => {
-      document.body.classList.toggle("dark");
-      localStorage.setItem("darkmode", document.body.classList.contains("dark"));
-    };
-    window.onload = () => {
-      if (localStorage.getItem("darkmode") === "true") {
-        document.body.classList.add("dark");
-      }
-    };
-  </script>
-</body>
-</html>
+form {
+  margin-bottom: 1rem;
+}
+
+input[type="text"],
+input[type="file"],
+select,
+textarea {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #555;
+  border-radius: 10px;
+  background: #1e1e1e;
+  color: #e0e0e0;
+}
+
+button {
+  padding: 0.9rem 1.5rem;
+  border: none;
+  background: #00c853;
+  color: white;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  transition: background 0.3s, transform 0.2s;
+}
+
+button:hover {
+  background: #00b248;
+  transform: scale(1.03);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  margin: 0.5rem 0;
+}
+
+.exercicio {
+  background: #1f1f1f;
+  border-left: 6px solid #00c853;
+  padding: 1rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+}
+
+.exercicio.concluido {
+  opacity: 0.6;
+  background: #2e7d32;
+}
+
+.series, .descanso {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+button.excluir {
+  background: #d50000;
+}
+
+button.excluir:hover {
+  background: #b71c1c;
+}
+
+a.botao-acao {
+  display: inline-block;
+  padding: 1rem 2rem;
+  background: #2962ff;
+  color: white;
+  text-decoration: none;
+  border-radius: 12px;
+  font-weight: bold;
+  text-align: center;
+  width: 100%;
+  margin-top: 0.5rem;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.5);
+}
+
+.dark-toggle {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  padding: 0.8rem;
+  background: #333;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 999;
+}
+
+.voltar {
+  display: inline-block;
+  margin: 1rem 0;
+  color: #90caf9;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.voltar:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+  h1, h2 {
+    font-size: 1.5rem;
+  }
+
+  .container {
+    padding: 1rem 0.75rem;
+  }
+
+  .series, .descanso {
+    flex-direction: column;
+  }
+
+  button, a.botao-acao {
+    width: 100%;
+  }
+
+  .voltar {
+    text-align: center;
+    display: block;
+  }
+}
+
