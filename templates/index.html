@@ -2,28 +2,27 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Projeto Gorila</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Projeto Gorila 🦍</h1>
+  <div class="container" style="text-align: center;">
+    <h1>Projeto Gorila 🐘</h1>
     <h2>Escolha seu treino</h2>
 
-    <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin: 1.5rem 0;">
+    <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem;">
       {% for dia in dias %}
-        <a href="/treino/{{ dia }}" class="botao-acao">{{ dia }}</a>
+        <a href="/treino/{{ dia }}" class="botao-acao" style="background: #ffeb3b; color: black; font-weight: bold;">{{ dia }}</a>
       {% endfor %}
     </div>
 
-    <div style="text-align: center; margin-top: 2rem;">
-      <a href="/historico" class="botao-acao">📅 Ver Histórico</a>
-      <a href="/historico/download" class="botao-acao">📥 Exportar Histórico CSV</a>
+    <div style="margin-top: 2rem; display: flex; flex-direction: column; gap: 0.5rem;">
+      <a href="/historico" class="botao-acao">Ver Histórico</a>
+      <a href="/historico/download" class="botao-acao">Exportar Histórico CSV</a>
     </div>
   </div>
 
-  <!-- Botão de modo escuro -->
   <button class="dark-toggle" onclick="toggleDark()">🌙</button>
   <script>
     const toggleDark = () => {
@@ -38,3 +37,4 @@
   </script>
 </body>
 </html>
+

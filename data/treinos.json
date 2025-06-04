@@ -1,14 +1,55 @@
 {
-  "Treino A": [],
-  "Treino B": [
+  "Treino A": [
     {
-      "exercicio": "Treino teste",
-      "imagem": "20250604071502_prancha-exercicio-academia-0217-1400x800.jpg.jpg",
+      "exercicio": "Cadeira Extensora",
+      "imagem": "",
+      "series": "4x12",
+      "carga": "40Kg",
+      "concluido": false
+    },
+    {
+      "exercicio": "Leg Press 45°",
+      "imagem": "",
+      "series": "4x10",
+      "carga": "80Kg",
+      "concluido": false
+    },
+    {
+      "exercicio": "Cadeira Flexora",
+      "imagem": "",
       "series": "3x12",
       "carga": "40Kg",
-      "obs": "teste ",
+      "concluido": false
+    },
+    {
+      "exercicio": "Glúteo no Cross",
+      "imagem": "",
+      "series": "3x15",
+      "carga": "10Kg",
+      "concluido": false
+    },
+    {
+      "exercicio": "Abdução de Quadril",
+      "imagem": "",
+      "series": "3x15",
+      "carga": "80Kg",
+      "concluido": false
+    },
+    {
+      "exercicio": "Abdominal Máquina",
+      "imagem": "",
+      "series": "3x20",
+      "carga": "10Kg",
+      "concluido": false
+    },
+    {
+      "exercicio": "Prancha Isométrica",
+      "imagem": "",
+      "series": "4x12",
+      "carga": "80Kg",
       "concluido": false
     }
   ],
+  "Treino B": [],
   "Treino C": []
 }
