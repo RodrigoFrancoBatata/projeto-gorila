@@ -15,14 +15,18 @@
       {% set i = loop.index0 %}
       <div class="exercicio{% if exercicio.concluido %} concluido{% endif %}">
         <h3>{{ exercicio.exercicio }}</h3>
+        
         {% if exercicio.imagem %}
           <img src="/static/imagens/{{ exercicio.imagem }}" alt="{{ exercicio.exercicio }}">
         {% endif %}
+
         <p><strong>Série:</strong> {{ exercicio.series }} &nbsp;&nbsp; <strong>Carga:</strong> {{ exercicio.carga }}</p>
 
         <form method="post">
           <input type="hidden" name="index" value="{{ i }}">
-          <button type="submit" name="concluido" class="botao-acao" style="background:#00c853;color:white;">{% if exercicio.concluido %}Desmarcar{% else %}Concluído{% endif %}</button>
+          <button type="submit" name="concluido" class="botao-acao" style="background:#FFD600; color:#000;">
+            {% if exercicio.concluido %}Desmarcar{% else %}Concluído{% endif %}
+          </button>
         </form>
 
         <div class="descanso">
@@ -31,10 +35,14 @@
           <button onclick="iniciarDescanso(60, this)">60s</button>
         </div>
 
-        <form method="post">
+        <form method="post" enctype="multipart/form-data" style="margin-bottom: 1rem;">
           <input type="hidden" name="index" value="{{ i }}">
-          <label><strong>Editar carga:</strong></label>
-          <input type="text" name="nova_carga" placeholder="Nova carga">
+          <label for="nova_carga_{{ i }}">Editar carga:</label>
+          <input type="text" name="nova_carga" id="nova_carga_{{ i }}" placeholder="Nova carga">
+
+          <label for="nova_imagem_{{ i }}">Nova imagem (opcional):</label>
+          <input type="file" name="nova_imagem" id="nova_imagem_{{ i }}" accept="image/*">
+
           <button type="submit">Salvar</button>
         </form>
 
@@ -47,8 +55,8 @@
     <h3>Adicionar Novo Exercício</h3>
     <form method="post" action="/adicionar/{{ dia }}" enctype="multipart/form-data">
       <input type="text" name="exercicio" placeholder="Nome do exercício" required>
-      <label>Foto do equipamento:</label>
-      <input type="file" name="imagem">
+      <label for="imagem_upload">Foto do equipamento:</label>
+      <input type="file" name="imagem" id="imagem_upload" accept="image/*">
       <input type="text" name="series" placeholder="Séries" required>
       <input type="text" name="carga" placeholder="Carga (kg)" required>
       <button type="submit">+ Adicionar</button>
@@ -66,6 +74,7 @@
         document.body.classList.add("dark");
       }
     };
+
     function iniciarDescanso(segundos, botao) {
       let tempo = segundos;
       botao.disabled = true;
@@ -83,3 +92,4 @@
   </script>
 </body>
 </html>
+
