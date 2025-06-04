@@ -214,5 +214,113 @@
         "concluido": false
       }
     ]
+  },
+  {
+    "data": "2025-06-04",
+    "exercicios": [
+      {
+        "exercicio": "Cadeira Extensora",
+        "imagem": "20250604115433_shutterstock_1174503379-1-scaled.jpg",
+        "series": "4x12",
+        "carga": "",
+        "concluido": true
+      },
+      {
+        "exercicio": "Leg Press 45°",
+        "imagem": "",
+        "series": "4x10",
+        "carga": "80Kg",
+        "concluido": false
+      },
+      {
+        "exercicio": "Cadeira Flexora",
+        "imagem": "",
+        "series": "3x12",
+        "carga": "40Kg",
+        "concluido": false
+      },
+      {
+        "exercicio": "Glúteo no Cross",
+        "imagem": "",
+        "series": "3x15",
+        "carga": "10Kg",
+        "concluido": false
+      },
+      {
+        "exercicio": "Abdução de Quadril",
+        "imagem": "",
+        "series": "3x15",
+        "carga": "80Kg",
+        "concluido": false
+      },
+      {
+        "exercicio": "Abdominal Máquina",
+        "imagem": "",
+        "series": "3x20",
+        "carga": "10Kg",
+        "concluido": false
+      },
+      {
+        "exercicio": "Prancha Isométrica",
+        "imagem": "",
+        "series": "4x12",
+        "carga": "80Kg",
+        "concluido": false
+      }
+    ]
+  },
+  {
+    "data": "2025-06-04",
+    "exercicios": [
+      {
+        "exercicio": "Cadeira Extensora",
+        "imagem": "20250604115433_shutterstock_1174503379-1-scaled.jpg",
+        "series": "4x12",
+        "carga": "",
+        "concluido": false
+      },
+      {
+        "exercicio": "Leg Press 45°",
+        "imagem": "",
+        "series": "4x10",
+        "carga": "80Kg",
+        "concluido": false
+      },
+      {
+        "exercicio": "Cadeira Flexora",
+        "imagem": "",
+        "series": "3x12",
+        "carga": "40Kg",
+        "concluido": false
+      },
+      {
+        "exercicio": "Glúteo no Cross",
+        "imagem": "",
+        "series": "3x15",
+        "carga": "10Kg",
+        "concluido": false
+      },
+      {
+        "exercicio": "Abdução de Quadril",
+        "imagem": "",
+        "series": "3x15",
+        "carga": "80Kg",
+        "concluido": false
+      },
+      {
+        "exercicio": "Abdominal Máquina",
+        "imagem": "",
+        "series": "3x20",
+        "carga": "10Kg",
+        "concluido": false
+      },
+      {
+        "exercicio": "Prancha Isométrica",
+        "imagem": "",
+        "series": "4x12",
+        "carga": "80Kg",
+        "concluido": false
+      }
+    ]
   }
 ]
