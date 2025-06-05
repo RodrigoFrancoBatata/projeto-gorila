@@ -45,11 +45,111 @@
     {
       "exercicio": "Prancha Isométrica",
       "imagem": "",
-      "series": "4x12",
+      "series": "3X30s",
       "carga": "80Kg",
       "concluido": false
     }
   ],
-  "Treino B": [],
-  "Treino C": []
+  "Treino B": [
+    {
+      "exercicio": "Puxada Frontal",
+      "imagem": "",
+      "series": "4x12",
+      "carga": "40Kg",
+      "concluido": false
+    },
+    {
+      "exercicio": "Remada Baixa Triângulo",
+      "imagem": "",
+      "series": "4x12",
+      "carga": "50Kg",
+      "concluido": false
+    },
+    {
+      "exercicio": "Puxada Neutra",
+      "imagem": "",
+      "series": "3x12",
+      "carga": "60Kg",
+      "concluido": false
+    },
+    {
+      "exercicio": "Rosca Bíceps Guiada",
+      "imagem": "",
+      "series": "3x12",
+      "carga": "10Kg",
+      "concluido": false
+    },
+    {
+      "exercicio": "Rosca Martelo",
+      "imagem": "",
+      "series": "3x10",
+      "carga": "8Kg",
+      "concluido": false
+    },
+    {
+      "exercicio": "Abdominal Oblíquo Máquina",
+      "imagem": "",
+      "series": "3x20",
+      "carga": "10Kg",
+      "concluido": false
+    },
+    {
+      "exercicio": "Prancha Isométrica com toque",
+      "imagem": "",
+      "series": "2x20",
+      "carga": "Corpo",
+      "concluido": false
+    }
+  ],
+  "Treino C": [
+    {
+      "exercicio": "Supino Inclinado",
+      "imagem": "",
+      "series": "4x10",
+      "carga": "40Kg",
+      "concluido": false
+    },
+    {
+      "exercicio": "Peck Deck",
+      "imagem": "",
+      "series": "3x12",
+      "carga": "40Kg",
+      "concluido": false
+    },
+    {
+      "exercicio": "Tríceps no Pulley",
+      "imagem": "",
+      "series": "3x12",
+      "carga": "20Kg",
+      "concluido": false
+    },
+    {
+      "exercicio": "Tríceps no Testa Polia",
+      "imagem": "",
+      "series": "3x10",
+      "carga": "10Kg",
+      "concluido": false
+    },
+    {
+      "exercicio": "Elevação Lateral",
+      "imagem": "",
+      "series": "3x12",
+      "carga": "6Kg",
+      "concluido": false
+    },
+    {
+      "exercicio": "Stiff",
+      "imagem": "",
+      "series": "3x12",
+      "carga": "20Kg",
+      "concluido": false
+    },
+    {
+      "exercicio": "Prancha Isométrica com toque",
+      "imagem": "",
+      "series": "2x20",
+      "carga": "Corpo",
+      "concluido": false
+    }
+  ]
 }
